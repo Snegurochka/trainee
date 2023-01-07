@@ -474,6 +474,44 @@ const quizReact: TQuiz[] = [
       `,
     category: REACT,
   },
+  {
+    id: 206,
+    question: "Add routs to the App (with createBrowserRouter)",
+    answer: ` Create an array with routes objects:
+    const router = createBrowserRouter([
+      {path: '/', element: <Home />, loader: async () => {}},}])
+      And then add it to the App:
+      <RouterProvider router={router}>`,
+    category: REACT,
+  },
+  {
+    id: 207,
+    question: "How to display a nested route?",
+    answer: `Add a nested route in the App:
+    <Route path="help" element={<HelpLayout />}>
+      <Route path="faq" element={<Faq />} />
+      </Route>
+      And then in HelpLayout component:
+    <Outlet />`,
+    category: REACT,
+  },
+  {
+    id: 208,
+    question: "How to fetch data in the route?",
+    answer: `Use loader in the route:
+    const userLoader = async ({params}) => {
+      const response = await fetch(\`URL + params.id\`);
+      return response.json();
+    }
+    And then add it to the route:
+    const router = createBrowserRouter([
+        {path: '/user/:id', element: <User />, loader: userLoader},
+    ])
+    And then use hook useLoaderData in the component:
+    const data = useLoaderData();
+    `,
+    category: REACT,
+  },
 ];
 
 export const quiz = [...quizJs, ...quizReact, ...quizTs];

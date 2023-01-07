@@ -1,18 +1,13 @@
 import { Provider } from "react-redux";
+import { RouterProvider } from "react-router-dom";
+
 import { store } from "./services/store";
-import { Grid } from "@mui/material";
-import { Menu } from "./modules/Menu/components/Menu";
-import { Quiz } from "./modules/Quiz/components/Quiz";
+import { router } from "./services/routes";
 
 function App() {
   return (
     <Provider store={store}>
-      <Grid container spacing={2} mt={4}>
-        <Grid item xs={3} ml={4}>
-          <Menu />
-        </Grid>
-        <Quiz />
-      </Grid>
+      <RouterProvider router={router} />
     </Provider>
   );
 }
