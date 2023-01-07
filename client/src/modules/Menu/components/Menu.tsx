@@ -5,14 +5,14 @@ import { navigationLinks } from "../service/menu-mock";
 
 import { Stack } from "@mui/material";
 import MenuItem from "./MenuItem";
-import { LoginNavButton } from "../../Login/components/LoginNavButton";
+import { AuthNavButton } from "../../Auth/components/AuthNavButton";
 
 export const Menu = () => {
   const categories = useSelector(selectCategories);
 
   return (
     <Stack spacing={4}>
-      <LoginNavButton />
+      <AuthNavButton />
 
       <Stack spacing={2}>
         {navigationLinks.map((navItem) => (

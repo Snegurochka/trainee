@@ -512,6 +512,25 @@ const quizReact: TQuiz[] = [
     `,
     category: REACT,
   },
+  {
+    id: 209,
+    question: "Create a user slice with redux-toolkit. Add a setUser action.",
+    answer: `export const userSlice = createSlice({
+      name: 'user',
+      initialState: {},
+      reducers: {
+        setUser: (state, action) => {
+          const { id, email, token } = action.payload;
+          state.id = id;
+          state.email = email;
+          state.token = token;
+        },
+      },
+      extraReducers: {},
+      })
+      export const {setUser} = userSlice.actions;`,
+    category: REACT,
+  },
 ];
 
 export const quiz = [...quizJs, ...quizReact, ...quizTs];
