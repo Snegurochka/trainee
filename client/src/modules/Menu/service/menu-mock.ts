@@ -1,17 +1,15 @@
-import { RoutesApp } from "../../../services/const";
+import { RoutesApp } from "../../../services/routes/const";
 
 export const navigationLinks = [
   {
     id: '1',
     name: 'Home',
     path: RoutesApp.HOME,
-    icon: 'home',
   },
   {
     id: '2',
     name: 'Quiz',
     path: RoutesApp.QUIZ,
-    icon: 'question',
   }
 ];
 export const categories = [

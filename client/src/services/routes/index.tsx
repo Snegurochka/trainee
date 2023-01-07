@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import { RoutesApp } from "./const";
 
 import { HomePage } from "../../pages/HomePage";
 import { AuthPage } from "../../pages/AuthPage";
@@ -11,8 +12,8 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "/quiz", element: <QuizPage /> },
-      { path: "/auth", element: <AuthPage /> },
+      { path: RoutesApp.QUIZ, element: <QuizPage /> },
+      { path: RoutesApp.AUTH, element: <AuthPage /> },
     ],
   },
 ]);

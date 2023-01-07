@@ -1,5 +1,9 @@
+import { Quiz } from "../modules/Quiz/components/Quiz"
+
 export const QuizPage = () => {
   return (
-    <div>QuizPage</div>
+    <>
+        <Quiz />
+    </>
   )
 }
