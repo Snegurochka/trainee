@@ -531,6 +531,13 @@ const quizReact: TQuiz[] = [
       export const {setUser} = userSlice.actions;`,
     category: REACT,
   },
+  {
+    id: 210,
+    question: "Create a controlled input for email",
+    answer: `const [email, setEmail] = useState('');
+    <input type="email" value={email} onChange={e => setEmail(e.target.value)} />`,
+    category: REACT,
+  },
 ];
 
 export const quiz = [...quizJs, ...quizReact, ...quizTs];

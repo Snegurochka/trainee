@@ -16,7 +16,7 @@ export const userSlice = createSlice({
       state.email = email;
       state.token = token;
     },
-    logout: (state) => {
+    removeUser: (state) => {
       state.id = "";
       state.email = "";
       state.token = "";
@@ -24,4 +24,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, logout } = userSlice.actions;
+export const { setUser, removeUser } = userSlice.actions;

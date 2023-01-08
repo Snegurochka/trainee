@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router-dom";
 
 import { store } from "./services/store";
 import { router } from "./services/routes";
+import "./services/firebase";
 
 function App() {
   return (
