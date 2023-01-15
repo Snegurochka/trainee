@@ -1,4 +1,4 @@
-import { REACT } from "./quiz-const";
+import { REACT, TESTS } from "./quiz-const";
 import { TQuiz } from "./quiz-type";
 
 const quizJs: TQuiz[] = [
@@ -85,6 +85,152 @@ const quizJs: TQuiz[] = [
       .filter(([key]: Array<K>) => keys.includes(key))
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Pick<T, K>;
       `,
+    category: "JS",
+  },
+  {
+    id: 10,
+    question: `How to save three first elements of the array to the variables a, b, c? \n
+    const arr = [1, 2, [3, 4]]];`,
+    answer: `const [a, b, [c]] = arr;`,
+    category: "JS",
+  },
+  {
+    id: 11,
+    question: `We ned to get the opening hours of the restaurant for Thursday and Friday. \n
+    Save them to the different variables. \n
+    const openingHours = {
+      thu: {
+        open: 12,
+        close: 22,
+        },
+      fri: {
+        open: 11,
+        close: 23,
+        },
+    }`,
+    answer: `const {  
+      thu: { open: openThurs, close: closeThurs }, 
+      fri: { open: openFri, close: closeFri } 
+    } = openingHours;`,
+    category: "JS",
+  },  
+  {
+    id: 12,
+    question: `const fruits = ['apple', 'banana', 'orange']; \n
+    Create a new array with the first element removed.
+    Create a new array with lemon added to the beginning of the array.`,
+    answer: `const [, ...rest] = fruits;
+    const newFruits = ['lemon', ...fruits];`,
+    category: "JS",
+  }, 
+  {
+    id: 13,
+    question: `const openingHours = {
+      thu: {
+        open: 12,
+        close: 22,
+      },
+      fri: {
+        open: 11,
+        close: 23,
+      },
+      sat: {
+        open: 11,
+        close: 23,
+      },
+    }; \n
+    Save the opening hours of the restaurant for weekDays and sat to the different variables.`,
+    answer: `const { sat, ...weekDays } = openingHours;`,
+    category: "JS",
+  },
+  {
+    id: 14,
+    question: `Create a function that accepts endless number of arguments and returns the sum of them.`,
+    answer: `const sum = (...args: number[]) => args.reduce((acc, el) => acc + el, 0);`,
+    category: "JS",
+  },
+  {
+    id: 15,
+    question: `What is the output of the following code? \n
+    console.log(2 || 'Anna');
+    console.log('' || 'Anna');`,
+    answer: `
+      console.log(2 || 'Anna'); // 2
+      console.log('' || 'Anna'); // Anna`,
+    category: "JS",
+  },
+  {
+    id: 16,
+    question: `Pass default value to the variable if it is undefined: \n    `,
+    answer: `const guests = passedValueOfGuests ?? 10;`,
+    category: "JS",
+  },
+  {
+    id: 17,
+    question: `Assign default value to the variable userName if it is undefined:`,
+    answer: `const userName = passedValueOfUserName || 'Anna';`,
+    category: "JS",
+  },
+  {
+    id: 18,
+    question: `What is the output of the following code? \n
+    console.log(0 && 'Anna');`,
+    answer: `console.log(0 && 'Anna'); // 0`,
+    category: "JS",
+  },
+  {
+    id: 19,
+    question: `Use short syntax for the following code: \n
+    if (user.printHello) {
+      user.printHello('Anna');
+    }`,
+    answer: `user.printHello?.('Anna');`,
+    category: "JS",
+  },
+  {
+    id: 20,
+    question: `Use short syntax for the following code: \n
+    const orderPizza = restaurant.orderPizza ?? restaurant.orderPizza();`,
+    answer: `const orderPizza = restaurant.orderPizza?.();`,
+    category: "JS",
+  },
+  {
+    id: 21,
+    question: `Where is the potential problem with the following code? \n
+    const height = 0;
+    const myHeight = height || 100;
+    const myHeight2 = height ?? 100;`,
+    answer: `const height = 0;
+    const myHeight = height || 100; // 100 - it can be a problem
+    const myHeight2 = height ?? 100; // 0`,
+    category: "JS",
+  },
+  {
+    id: 22,
+    question: `How to write this code shorter? \n
+    rest.numGuests = rest.numGuests ?? 10;`,
+    answer: `rest.numGuests ??= 10;`,
+    category: "JS",
+  },
+  {
+    id: 23,
+    question: `How to write this code without if statement? \n
+    if (team1.score > team2.score) {
+      console.log('Team 1 wins');
+    } else {
+      console.log('Team 2 wins');
+    })`,
+    answer: `team1.score > team2.score && console.log('Team 1 wins');
+    team1.score < team2.score && console.log('Team 2 wins');`,
+    category: "JS",
+  },
+  {
+    id: 23,
+    question: `How to loop the array without using function? \n
+    It can be useful when working in an async function.`,
+    answer: `for (const [i, el] of arr.entries()) {
+      console.log(\`\${i + 1}: \${el}\`);
+      }`,
     category: "JS",
   },
 ];
@@ -207,7 +353,8 @@ const quizTs: TQuiz[] = [
   {
     id: 108,
     question: `What are conditional types? How do you create them?`,
-    answer: `C extends B ? TypeX : TypeY`,
+    answer: `C extends B ? TypeX : TypeY \n
+    type MyExclude<T, U> = T extends U ? never : T;`,
     category: "TS",
   },
   {
@@ -423,6 +570,102 @@ const quizTs: TQuiz[] = [
       };`,
     category: "TS",
   },
+  {
+    id: 130,
+    question: `We have interface IUser with the fields: name, age, occupation, id, role. \n
+    Create a type with all fields except id and role`,
+    answer: `type IPublicUser = Omit<User, 'id' | 'role'>;`,
+    category: "TS",
+  },
+  {
+    id: 131,
+    question: `We have interface ICategory with the fields: name, id, parentId, products. \n
+    Create a type with id and name fields`,
+    answer: `type ICategoryShort = Pick<ICategory, 'id' | 'name'>;`,
+    category: "TS",
+  },
+  {
+    id: 132,
+    question: `We have interface ICategory with the fields: name, id, parentId, products. \n
+    Create a type with all fields but not required`,
+    answer: `type ICategoryAPI = Partial<ICategory>;`,
+    category: "TS",
+  },
+  {
+    id: 133,
+    question: `We have interface IUser with the fields: name, id \n
+    Create a new interface the field role with the type 'admin' | 'user'`,
+    answer: `interface IUserWithRole extends IUser {
+      role: 'admin' | 'user';
+      }`,
+    category: "TS",
+  },
+  {
+    id: 134,
+    question: `Create interface IResponse with the fields: data, status, error. \n
+    Use it in the function "fetchByUrl" to get the data from the server \n`,
+    answer: `interface IResponse<T> {
+      data: T  | null;
+      status: number;
+      error: string | null;
+      }
+      const fetchByUrl = async <T>(url: string): Promise<IResponse<T>> => {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          return { data, status: response.status, error: null };
+          } catch (error) {
+            return { data: null, status: 500, error: error.message };
+            }
+        }
+        
+      fetchByUrl<User>(url)`,
+    category: "TS",
+  },
+  {
+    id: 135,
+    question: `Create class User with the fields: name, age and not public property keyId \n
+    Add to the constructor the generation of the keyId \n
+    Add method "login" that returns the string "$name $age" \n
+    Create a new object from User`,
+    answer: `class User {
+      private keyId: string;
+      constructor(public name: string, public age: number) {
+        this.keyId = Math.random().toString(36).substr(2, 9);
+      }
+      get login() {
+        return \`\${this.name} \${this.age}\`;
+      }
+      }
+      const user = new User('John', 30);
+      user.login`,
+    category: "TS",
+  },
+  {
+    id: 136,
+    question: `Create class Customer that inherits from class User (name, age) \n
+    Add the field "discount" \n`,
+    answer: `class Customer extends User {
+      constructor(name: string, age: number, public discount: number) {
+        super(name, age);
+    }
+      const customer = new Customer('John', 30, 10);`,
+    category: "TS",
+  },
+  {
+    id: 137,
+    question: `we should add some guests to the seats in the room \n
+    [A1]: 'John', [A2]: 'Mary', [B1]: 'Bob', [B2]: 'Kate' \n
+    Create class SeatAssignment with index property signature \n
+    Why will we use it? \n`,
+    answer: `class SeatAssignment {
+      [seat: string]: string;
+      }
+      const seats = new SeatAssignment();
+      seats.A1 = 'John';
+      Answer: we don't know how many properties will be in the object`,
+    category: "TS",
+  },
 ];
 
 const quizReact: TQuiz[] = [
@@ -457,21 +700,16 @@ const quizReact: TQuiz[] = [
   {
     id: 205,
     question: "Create a Component with a Render Props pattern",
-    answer: `const ToggleComponent = ({renderToggleOn, renderToggleOff}) => {
-      return (
-        <div>
-          {renderToggleOn()}
-          {renderToggleOff()}
-        </div>
-      )
-        const ParentComponent = () => {
-          return (
-            <ToggleComponent
-              renderToggleOn={() => <button>On</button>}
-              renderToggleOff={() => <button>Off</button>}
-            />
-          )
-      `,
+    answer: `const Widget = ({renderContent}) => {
+      // get data from the server, some logic
+    return (
+      <Card>
+      <CardHeader title="Widget" />
+        {data.map(item => <div>{renderContent(item)}</div>)
+      </Card>
+    });
+    const UserWidget = () => <Widget renderContent={(item) => <UserItem item={item}>} />
+    const ProductWidget = () => <Widget renderContent={(item) => <ProductItem item={item}>} />`,
     category: REACT,
   },
   {
@@ -538,6 +776,164 @@ const quizReact: TQuiz[] = [
     <input type="email" value={email} onChange={e => setEmail(e.target.value)} />`,
     category: REACT,
   },
+  {
+    id: 210,
+    question: "Create a form with email input with React hook form. Add validation and errors for email.",
+    answer: `const { register, handleSubmit, formState: { errors } } = useForm<TInputs>();
+    const onSubmit: SubmitHandler<TInputs> = data => console.log(data);
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('email', { required: true })} />
+      {errors.email && <span>This field is required</span>}
+      </form>
+    `,
+    category: REACT,
+  },
+  {
+    id: 211,
+    question: `Configure React hook form with validation fields onBlur`,
+    answer: `const { register, handleSubmit, formState: { errors } } = useForm<TInputs>({
+      mode: 'onBlur',
+      });`,
+    category: REACT,
+  },
+  {
+    id: 212,
+    question: `Create slice with redux-toolkit for counter with initial state 0. Add action with payload (add Types): increment.`,
+    answer: `export const counterSlice = createSlice({
+      name: 'counter',
+      initialState: 0,
+      reducers: {
+        increment: (state, action: PayloadAction<number>) => state + action.payload,
+        },
+        extraReducers: {},
+        })
+      export const {increment} = counterSlice.actions;`,
+    category: REACT,
+  },
+  {
+    id: 212,
+    question: `Typing RootState in Redux`,
+    answer: `export type RootState = ReturnType<typeof store.getState>;`,
+    category: REACT,
+  },
+  {
+    id: 213,
+    question: `Create a Filter component with list of fruits. Add a filter by input value.`,
+    answer: `const Filter = () => {
+      const [fruits, setFruits] = useState(['apple', 'banana', 'orange']);
+      const [search, setSearch] = useState('');
+      const filteredFruits = fruits.filter(fruit => fruit.includes(search));
+      return (
+        <div>
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
+          <ul>
+            {filteredFruits.map(fruit => (
+              <li key={fruit}>{fruit}</li>
+            ))}
+          </ul>
+        </div>
+      )}`,
+    category: REACT,
+  },
 ];
 
-export const quiz = [...quizJs, ...quizReact, ...quizTs];
+const quizTests: TQuiz[] = [
+  {
+    id: 301,
+    question: `Cover a component List with tests (2 or more) \n
+    const List = ({items}) => {
+      return (
+        <ul>
+          {items.map(item => (
+            <li key={item.id}>{item.name}</li>
+            ))}
+        </ul>
+      )
+    }`,
+    answer: `import { render, screen } from '@testing-library/react';
+    import List from './List';
+    const items = [
+      {id: 1, name: 'item 1'},
+      {id: 2, name: 'item 2'},
+      {id: 3, name: 'item 3'},
+      ];
+    
+    describe('List', () => {
+      it('should render list', () => {
+        // Arrange
+        render(<List items={items} />);
+
+        // Act - empty
+        
+        // Assert
+          const list = screen.getByRole('list');
+          expect(list).toBeInTheDocument();
+        });
+
+        it('should render list items', () => {
+          render(<List items={items} />);
+          const listItems = screen.getAllByRole('listitem');
+          expect(listItems).toHaveLength(items.length);
+        });`,
+    category: TESTS,  
+  },
+  {
+    id: 302,
+    question: `If no data is passed to the component, it shouldn't render anything.\n
+    const List = ({items}) => {
+      return (
+        <ul>
+          {items.map(item => (
+            <li key={item.id}>{item.name}</li>
+            ))}
+        </ul>
+      )
+    }`,
+    answer: `it('should not render list, if no data is passed', () => {
+      render(<List items={[]} />);
+      const list = screen.queryByRole('list');
+      expect(list).not.toBeInTheDocument();
+      });`,
+    category: TESTS,  
+  },
+  {
+    id: 303,
+    question: `Check if the Search component (<Search onChange={onChange} />) renders an input.`,
+    answer: `it('should render input', () => {
+      const onChange = jest.fn();
+      render(<Search onChange={onChange} />);
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
+      });`,
+    category: TESTS,  
+  },
+  {
+    id: 304,
+    question: `Check if onChange is called when the input value changes.\n
+    const Search = ({onChange}) => (<input type="text" onChange={onChange} />)`,
+    answer: `it('should call onChange when input value changes', () => {
+      const onChange = jest.fn();
+      render(<Search onChange={onChange} />);
+      const input = screen.getByRole('textbox');
+      userEvent.type(input, 'test');
+      expect(onChange).toHaveBeenCalledTimes(4);
+      });`,
+    category: TESTS,  
+  },
+  {
+    id: 305,
+    question: `There is a Filter with two components: List of fruits and Search.\n
+    The list of fruits is filtered by the search value. Write tests for the Filter component.\n`,
+    answer: `it('should filter list of fruits by search value', () => {
+      render(<Filter />);
+      const input = screen.getByRole('textbox');
+      userEvent.type(input, 'apple');
+      const listItems = screen.getAllByRole('listitem');
+      expect(listItems).toHaveLength(1);
+      });`,
+    category: TESTS,  
+  },
+
+];
+
+export const quiz = [...quizJs, ...quizReact, ...quizTs, ...quizTests];
