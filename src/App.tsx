@@ -1,16 +1,13 @@
-import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
-
-import { store } from "./services/store";
 import { router } from "./services/routes";
 import "./services/firebase";
+import { useAuth } from "./modules/Auth/services/use-auth-hook";
 
 function App() {
-  return (
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  );
+  const { checkAuth } = useAuth();
+  checkAuth();
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

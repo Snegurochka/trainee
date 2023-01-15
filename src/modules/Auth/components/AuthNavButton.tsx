@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
 import { RoutesApp } from "../../../services/routes/const";
-import { useAuth } from "../services/auth-hook";
+import { useAuth } from "../services/use-auth-hook";
+import { useLogin } from "../services/use-login-hook";
+
+import { Button } from "@mui/material";
 
 export const AuthNavButton = () => {
-  const { isAuth, logOut } = useAuth();
+  const { logOut } = useLogin();
+  const { isAuth } = useAuth();
 
   if (isAuth) {
     return (

@@ -1,34 +1,19 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../services/hooks/redux";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { setUser } from "../../User/services/user-slice";
+import { useState, FormEvent } from "react";
 
 import { Button, Input } from "@mui/material";
+import { useLogin } from "../services/use-login-hook";
 
 export const AuthForm = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { logIn } = useLogin();
 
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        dispatch(
-          setUser({ id: user.uid, email: user.email, token: user.refreshToken })
-        );
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    logIn(email, password);
   };
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h1>Login</h1>
       <p>
         <Input
@@ -46,7 +31,7 @@ export const AuthForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </p>
-      <Button type="submit" variant="contained" onClick={handleSubmit}>
+      <Button type="submit" variant="contained">
         Login
       </Button>
     </form>
