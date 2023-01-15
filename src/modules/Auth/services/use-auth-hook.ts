@@ -20,7 +20,7 @@ export const useAuth = () => {
       setAuthByToken(token);
     }
     dispatch(setAuth(true));
-  }, [dispatch]);
+  }, [dispatch, uid]);
 
   return {
     isAuth,
