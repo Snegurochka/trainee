@@ -1,19 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentCategory } from "../service/menu-selectors";
-import { quizSlice } from "../../Quiz/services/quiz-slice";
-import { menuSlice } from "../service/menu-slice";
-import { Button } from "@mui/material";
+import { selectCurrentCategory } from "../services/filters-selectors";
 
-type MenuItemProps = {
+import { Button } from "@mui/material";
+import { setQuizByCategory } from "../../services/quiz-slice";
+import { setCurrentCategory } from "../services/filters-slice";
+
+type FilterCategoriesProps = {
   id: string;
   name: string;
 };
 
-export const MenuItem = ({ id, name }: MenuItemProps) => {
+export const FilterCategoriesItem = ({ id, name }: FilterCategoriesProps) => {
   const dispatch = useDispatch();
   const currentCategory = useSelector(selectCurrentCategory);
-  const { setCurrentCategory } = menuSlice.actions;
-  const { setQuizByCategory } = quizSlice.actions;
 
   const handleClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     const id = evt.currentTarget.id;
@@ -30,5 +29,3 @@ export const MenuItem = ({ id, name }: MenuItemProps) => {
     </Button>
   );
 };
-
-export default MenuItem;

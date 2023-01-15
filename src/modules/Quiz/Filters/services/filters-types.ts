@@ -4,4 +4,4 @@ export type TCategories = {
     description: string;
 }
 
-export type TCategoriesNames = "GENERAL" | "JS" | "TS" | "REACT";
+export type TCategoriesNames = "GENERAL" | "JS" | "TS" | "REACT" | "TESTS";

@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentCategory } from "../service/menu-selectors";
-import { setCurrentCategory } from "../service/menu-slice";
+import { selectCurrentCategory } from "./filters-selectors";
+import { setCurrentCategory } from "./filters-slice";
 
-export const useMenu = () => {
+export const useFilters = () => {
   const dispatch = useDispatch();
   const currentCategory = useSelector(selectCurrentCategory);
 

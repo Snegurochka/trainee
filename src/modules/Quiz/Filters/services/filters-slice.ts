@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { categories } from "./menu-mock";
+import { categories } from "./filters-mock";
 
 const initialState = {
   categories,
   currentCategory: categories[0].id,
 };
 
-export const menuSlice = createSlice({
-  name: "menu",
+export const filtersSlice = createSlice({
+  name: "filters",
   initialState,
   reducers: {
     setCurrentCategory: (state, action) => {
@@ -16,4 +16,5 @@ export const menuSlice = createSlice({
   },
 });
 
-export const { setCurrentCategory } = menuSlice.actions;
+export const { setCurrentCategory } = filtersSlice.actions;
+
