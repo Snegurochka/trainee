@@ -2,12 +2,29 @@ import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../services/hooks/redux";
 import {
-  incrementCorrectAnswers,
+  selectCorrectAnswers,
+  selectTotalAnswers,
+} from "../../Answers/services/answers-selector";
+import {
+  pushCorrectAnswer,
   incrementTotalAnswers,
-} from "../../AnswersCounter/services/answers-counter-slice";
+} from "../../Answers/services/answers-slice";
+import {
+  selectCompleted,
+  selectIdDoc,
+} from "../../User/services/user-selectors";
+import { setResult } from "../../User/services/user-slice";
+import { QUIZ_PER_ROUND } from "./quiz-const";
 import { selectIsToggled, selectQuestion, selectQuiz } from "./quiz-selector";
-import { nextQuestion, toggleAnswer } from "./quiz-slice";
+import { isResultCard, nextQuestion, toggleAnswer } from "./quiz-slice";
 import { getRandomInt } from "./quiz-utils";
+
+const getNetIndex = (length: number, completed: string[]): number => {
+  const nextIndex = getRandomInt(length);
+  return completed.includes(nextIndex.toString())
+    ? getNetIndex(length, completed)
+    : nextIndex;
+};
 
 export const useQuiz = () => {
   const dispatch = useAppDispatch();
@@ -15,18 +32,31 @@ export const useQuiz = () => {
   const quiz = useSelector(selectQuiz);
   const question = useSelector(selectQuestion);
   const isToggled = useSelector(selectIsToggled);
+  const total = useSelector(selectTotalAnswers);
+  const completedQuiz = useSelector(selectCompleted);
+  const correctAnswers = useSelector(selectCorrectAnswers);
+  const idDoc = useSelector(selectIdDoc);
 
   const setNewQuestion = useCallback(() => {
-    const nextIndex = getRandomInt(quiz.length);
-    dispatch(nextQuestion(nextIndex));
-    dispatch(incrementTotalAnswers(question.id));
-  }, [dispatch, quiz.length, question.id]);
+    if (total === QUIZ_PER_ROUND) {
+      const completed = [...completedQuiz, ...correctAnswers];
+      dispatch(isResultCard());
 
-  const nextQuestionHandler = useCallback(() => {
+      if (!idDoc) return;
+
+      dispatch(setResult({ completed, idDoc }));
+    } else {
+      const nextIndex = getNetIndex(quiz.length, completedQuiz);
+
+      dispatch(nextQuestion(nextIndex));
+      dispatch(incrementTotalAnswers());
+    }
+  }, [dispatch, quiz.length, total, completedQuiz, correctAnswers, idDoc]);
+
+  const correctAnswerHandler = useCallback(() => {
     setNewQuestion();
-
-    dispatch(incrementCorrectAnswers());
-  }, [dispatch, setNewQuestion]);
+    dispatch(pushCorrectAnswer(question.id));
+  }, [dispatch, setNewQuestion, question.id]);
 
   const wrongAnswerHandler = useCallback(() => {
     setNewQuestion();
@@ -39,7 +69,7 @@ export const useQuiz = () => {
   return {
     question,
     isToggled,
-    nextQuestionHandler,
+    correctAnswerHandler,
     wrongAnswerHandler,
     toggleAnswerHandler,
   };

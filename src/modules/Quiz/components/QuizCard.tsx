@@ -9,6 +9,18 @@ const CardContentWrapper = styled(CardContent)`
 const CardWrapper = styled(Card)`
   cursor: pointer;
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const CardBottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e0e0e0;
+  height: 34px;
+  padding: 0 16px 6px;
 `;
 
 export const QuizCard = () => {
@@ -19,6 +31,7 @@ export const QuizCard = () => {
       <CardContentWrapper>
         {!isToggled ? question.question : question.answer}
       </CardContentWrapper>
+      <CardBottom>{question.category}</CardBottom>
     </CardWrapper>
   );
 };

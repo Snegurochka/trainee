@@ -6,6 +6,7 @@ export const quizSlice = createSlice({
   initialState: {
     index: 0,
     isToggled: false,
+    isResultCard: false,
     question: quiz[0],
     quiz,
   },
@@ -28,7 +29,10 @@ export const quizSlice = createSlice({
     toggleAnswer: (state) => {
       state.isToggled = !state.isToggled;
     },
+    isResultCard: (state) => {
+      state.isResultCard = !state.isResultCard;
+    },
   },
 });
 
-export const { nextQuestion, setQuizByCategory, toggleAnswer } = quizSlice.actions;
+export const { nextQuestion, setQuizByCategory, toggleAnswer, isResultCard } = quizSlice.actions;

@@ -1,4 +1,4 @@
-import { TCategoriesNames } from "../../Menu/service/menu-types";
+import { TCategoriesNames } from "../Filters/services/filters-types";
 
 export type TQuiz = {
   id: number;
