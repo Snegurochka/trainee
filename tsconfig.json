@@ -21,6 +21,5 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-, "src/modules/AnswersCounter/services/answers-counter-selector.ts"  ]
+    "src" ]
 }

@@ -17,4 +17,5 @@ export const filtersSlice = createSlice({
 });
 
 export const { setCurrentCategory } = filtersSlice.actions;
+export default filtersSlice.reducer;
 

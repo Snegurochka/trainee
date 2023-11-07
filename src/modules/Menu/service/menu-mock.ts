@@ -16,4 +16,9 @@ export const navigationLinks = [
     name: 'Questions',
     path: RoutesApp.QUESTIONS,
   },
+  {
+    id: '4',
+    name: 'Account',
+    path: RoutesApp.ACCOUNT,
+  },
 ];

@@ -1,4 +1,4 @@
-import { RootState } from "../../../../services/store";
+import { RootState } from "../../../services/store";
 import { createSelector } from "reselect";
 
 export const selectCategories = createSelector(

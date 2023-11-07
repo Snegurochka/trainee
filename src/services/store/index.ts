@@ -1,14 +1,18 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { answersSlice } from "../../modules/Answers/services/answers-slice";
-import { filtersSlice } from "../../modules/Quiz/Filters/services/filters-slice";
-import { quizSlice } from "../../modules/Quiz/services/quiz-slice";
-import { userSlice } from "../../modules/User/services/user-slice";
+import user from "../../modules/User/services/user-slice";
+import quiz from "../../modules/Quiz/services/quiz-slice";
+import filters from "../../modules/Filters/services/filters-slice";
+import answers from "../../modules/Answers/services/answers-slice";
+import challenge from "../../modules/Challenge/services/challenge-slice";
+import xp from "../../modules/Xp/services/xp-slice";
 
 const rootReducer = combineReducers({
-  user: userSlice.reducer,
-  filters: filtersSlice.reducer,
-  quiz: quizSlice.reducer,
-  answers: answersSlice.reducer,
+  user,
+  quiz,
+  filters,
+  answers,
+  xp,
+  challenge
 });
 
 export const store = configureStore({
