@@ -7,7 +7,7 @@ export const QuizControls = () => {
   return (
     <FlexBox>
       <Button variant="contained" onClick={wrongAnswerHandler}>
-        I don't know
+        Send to training
       </Button>
       <Button
         variant="contained"

@@ -1,7 +1,8 @@
 import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AnswersCounter } from "../../Answers/components/AnswersCounter";
-import { QuizFilters } from "../Filters/components/QuizFilters";
+import { Filters } from "../../Filters/components/Filters";
+
 import { selectIsResultCard } from "../services/quiz-selector";
 
 import { QuizCard } from "./QuizCard";
@@ -24,7 +25,7 @@ export const Quiz = () => {
         )}
       </Grid>
       <Grid item md={3}>
-        <QuizFilters />
+        <Filters />
       </Grid>
     </Grid>
   );

@@ -36,3 +36,4 @@ export const quizSlice = createSlice({
 });
 
 export const { nextQuestion, setQuizByCategory, toggleAnswer, isResultCard } = quizSlice.actions;
+export default quizSlice.reducer;
