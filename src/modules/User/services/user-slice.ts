@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { updateCompleted } from "../../../services/firebase";
+import { updateCompleted, updateXp } from "../../../services/firebase";
 
 import { TUser } from "./user-types";
 
@@ -10,9 +10,18 @@ const initialState = {
 
 export const setResult = createAsyncThunk(
   "user/setResult",
-  async (payload: { completed: string[]; idDoc: string }) => {
+  async (payload: { completed: number[]; idDoc: string }) => {
     const { completed, idDoc } = payload;
     await updateCompleted(idDoc, completed);
+    return payload;
+  }
+);
+
+export const addXp = createAsyncThunk(
+  "user/addXp",
+  async (payload: { xp: number; idDoc: string }) => {
+    const { xp, idDoc } = payload;
+    await updateXp(idDoc, xp);
     return payload;
   }
 );
@@ -33,10 +42,17 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setResult.fulfilled, (state, action) => {
-      const { completed } = action.payload;
-      state.user?.completed.push(...completed);
+      if (state.user) {
+        state.user.completed = action.payload.completed;
+      }
+    });
+    builder.addCase(addXp.fulfilled, (state, action) => {
+      if (state.user) {
+        state.user.xp = action.payload.xp;
+      }
     });
   },
 });
 
 export const { setUser, removeUser, setAuth } = userSlice.actions;
+export default userSlice.reducer;

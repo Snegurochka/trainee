@@ -3,6 +3,8 @@ export type TUser = {
     idDoc: string;
     email: string;
     name: string;
-    completed: string[];
+    level: number;
+    xp: number;
+    completed: number[];
     token: string;
 };

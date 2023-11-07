@@ -19,7 +19,9 @@ export const useAuth = () => {
     if (!uid) {
       setAuthByToken(token);
     }
-    dispatch(setAuth(true));
+    if (uid) {
+      dispatch(setAuth(true));
+    }
   }, [dispatch, uid]);
 
   return {

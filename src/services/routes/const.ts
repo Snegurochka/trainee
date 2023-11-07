@@ -4,4 +4,5 @@ export enum RoutesApp {
     AUTH = '/auth',
     ADMIN = '/admin',
     QUESTIONS = '/questions',
+    ACCOUNT = '/account',
 }
