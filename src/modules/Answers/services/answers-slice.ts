@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    correctAnswers: [] as string[],
+    correctAnswers: [] as number[],
     total: 0,
 }
 
@@ -10,8 +10,7 @@ export const answersSlice = createSlice({
     initialState,
     reducers: {
         pushCorrectAnswer: (state, payload) => {
-            const id = payload.payload
-            state.correctAnswers.push(id)
+            state.correctAnswers.push(payload.payload)
         },
         incrementTotalAnswers: (state) => {
             state.total += 1
@@ -20,3 +19,4 @@ export const answersSlice = createSlice({
 });
 
 export const { incrementTotalAnswers, pushCorrectAnswer } = answersSlice.actions;
+export default answersSlice.reducer;
