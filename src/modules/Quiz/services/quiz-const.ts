@@ -5,4 +5,4 @@ export const TESTS = "TESTS";
 export const GENERAL = "GENERAL";
 export const NEXT = "Next" as const;
 
-export const QUIZ_PER_ROUND = 10;
+export const QUIZ_PER_ROUND = 4;
