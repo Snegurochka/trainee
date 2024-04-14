@@ -2,13 +2,13 @@ import { Button } from "@mui/material";
 import { useChallenge } from "../services/use-challenge-hook";
 
 export const Challenge = () => {
-  const { isActive, startChallengeHandler } = useChallenge();
+  const { isChallengeActive, startChallengeHandler } = useChallenge();
 
   return (
     <div>
       Challenge
-      {isActive ? (
-        "table"
+      {isChallengeActive ? (
+         <Button onClick={startChallengeHandler}>Restart Challenge</Button>
       ) : (
         <Button onClick={startChallengeHandler}>Start Challenge</Button>
       )}

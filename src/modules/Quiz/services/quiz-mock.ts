@@ -1063,13 +1063,6 @@ const quizJs: TQuiz[] = [
     category: "JS",
     level: 2,
   },
-  {
-    id: 83,
-    question: `Create a Subscribable class using the Publisher/Subscriber pattern.`,
-    answer: ``,
-    category: "JS",
-    level: 2,
-  },
 ];
 
 const quizTs: TQuiz[] = [
@@ -2113,6 +2106,7 @@ const quizReact: TQuiz[] = [
   {
     id: 224,
     question: `Create a useFavorites hook. It should return an add function and a list of favorites ids. \n
+    Consider as an app with one user and no saving data on the server.
     Add this hook to the ProductList component`,
     answer: `export const useFavorites = (): {
       favorites: Set<number>,
@@ -2167,8 +2161,10 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 226,
-    question: `Create a ProductCard component using "Compound components" pattern`,
-    answer: `// some styles for blocks product_card, product_card__info, product_card__actions
+    question: `Create a ProductCard component using "Compound components" pattern and "Component as props".
+    Because the action button and the information block may be different for different clients.`,
+    answer: `// Compound components
+    // some styles for blocks product_card, product_card__info, product_card__actions
     export const ProductCard = ({
       image,
       info,
@@ -2424,7 +2420,12 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 235,
-    question: `Create hook useEvent(fn), it should return memoizable link to fn`,
+    question: `We're creating a chat app. We have an input and a custom send button. 
+    <MyInput value={text} onChange={changeHandler} />
+    <MyBtn onClick={clickHandler} />
+    We have to memorize clickHandler.
+    Why can't we use a useCallback?
+    Create a hook useEvent(fn), it should return memoizable link to fn and accept args.`,
     answer: `export const useEvent = <T extends (...args: any[]) => any>(cb: T) => {
       const cbRef = useRef(cb);
     
@@ -2440,7 +2441,9 @@ const quizReact: TQuiz[] = [
       );
     
       return eventCb;
-    };`,
+    };
+    // using
+    onClick = useEvent(text=>{ // action })`,
     category: REACT,
     level: 2,
   },
@@ -2683,6 +2686,44 @@ const quizReact: TQuiz[] = [
     category: REACT,
     level: 3,
   },
+  {
+    id: 247,
+    question: `Create an "Save money" App. It should have an amount and 2 buttons, save X$ and remove x$. Use Redux for state.`,
+    answer: `export const App = () => {
+      const dispatch = useDispatch();
+      const [value, setValue] = useState(0);
+      const balance = useSelector(balanceSelector);
+
+      const increaseHandler = () => {
+        dispatch(increase, value)
+      }
+      const decreaseHandler = () => {
+        dispatch(decrease, value)
+      }
+
+      return (<>
+        <div>{balance}</div>
+        <input type="text" value={value} onChange={(e) => {setValue(e.target.value)}}/>
+        <button onClick={increaseHandler} />
+        <button onClick={decreaseHandler} />
+        <>)
+    }
+    // reducer
+    const reducer = (state = {total: 0}, action) => {
+      switch (action.type) {
+        case INCR : {
+          return {...state, total: state.total + action.payload}
+        }
+        case DECR : {
+          return {...state, total: state.total - action.payload}
+        }
+        default: state
+      }
+    }
+    `,
+    category: REACT,
+    level: 3,
+  },
 ];
 
 const quizTests: TQuiz[] = [
@@ -2806,7 +2847,7 @@ const quizTests: TQuiz[] = [
   },
   {
     id: 307,
-    question: `Create a happy path test for a sagaWorker:
+    question: `Create a happy path test for a sagaWorker. Use redux-saga-test-plan:
 
     function* fetchUserDataWorker({ payload }: { payload: string }) {
       const userPosts = yield call(getUserPosts, payload);
@@ -2818,25 +2859,27 @@ const quizTests: TQuiz[] = [
       });
     }
     `,
-    answer: `it("should fetch user data", () => {
-      const uid = "123";
-      const action = {
-        payload: uid
-      };
-      const gen = fetchUserDataWorker(action);
+    answer: `
+    // Mock the getUserPosts function
+    jest.mock('./api', () => ({
+    getUserPosts: jest.fn()
+    }));
+    it("should fetch user data", () => {
+      const payload = 'user123'; // Define the payload for the test
+
+      const userPosts = [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }]; // Define the mocked userPosts data
     
-      expect(gen.next().value).toEqual(call(getUserPosts, uid));
-    
-      const userPosts = [{ a: "a" }];
-      expect(gen.next(userPosts).value).toEqual(
-        put({
-          type: "USER_POSTS_FETCH",
+      return expectSaga(fetchUserDataWorker, { payload })
+        .provide([
+          [call(getUserPosts, payload), userPosts] // Provide the mocked response for the call effect
+        ])
+        .put({
+          type: 'USER_POSTS_FETCH',
           payload: {
             data: userPosts
           }
         })
-      );
-      expect(gen.next().done).toEqual(true);
+        .run(); // Run the test
     });`,
     category: TESTS,
     level: 3,
@@ -2925,7 +2968,7 @@ const quizTests: TQuiz[] = [
     import { fetchDataAndProcess } from './moduleToTest';
     import { fetchData } from './fetchApi';
     
-    jest.mock('./fetchApi');
+    const fetchData = jest.fn();
     
     test('fetchDataAndProcess called fetchData', async () => {
       await fetchDataAndProcess();

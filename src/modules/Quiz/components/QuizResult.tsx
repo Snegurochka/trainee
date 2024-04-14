@@ -2,7 +2,8 @@ import { Card, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AnswersList } from "../../Answers/components/AnswersList";
 import { selectCorrectAnswers } from "../../Answers/services/answers-selector";
-import confettiGif from "../assets/confetti-gradient.gif";
+import { QuizWinCard } from "./QuizWinCard";
+import { ChallengeWinCard } from "../../Challenge/components/ChallengeWinCard";
 
 const CardWrapper = styled(Card)`
   padding: 24px;
@@ -14,7 +15,8 @@ export const QuizResult = () => {
     <CardWrapper>
       <h3>Quiz Result</h3>
       <AnswersList answers={correctAnswers} />
-      {correctAnswers.length > 3 && <img src={confettiGif} alt="confetti" />}
+      <ChallengeWinCard />
+      {correctAnswers.length > 3 && <QuizWinCard />}
     </CardWrapper>
   );
 };

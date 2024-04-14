@@ -27,6 +27,7 @@ const challengeSlice = createSlice({
     },
     setChallenge(state, action) {
       state.isActive = true;
+      state.idChallenge = action.payload.idChallenge;
       state.dateStart = action.payload.dateStart;
       state.lastCheckIn = action.payload.lastCheckIn;
     },
