@@ -6,6 +6,12 @@ export const FlexBox = styled(Box)({
   justifyContent: "space-between",
 });
 
+export const FlexColumnBox = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+});
+
 export const FlexBoxCenter = styled(Box)({
   display: "flex",
   justifyContent: "center",
