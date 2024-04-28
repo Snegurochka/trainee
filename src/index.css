@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --font-size-s: 12px;
+  --font-size-m: 16px;
+  --font-size-l: 24px;
+  --gap: 14px;
+  --m-s: 4px;
+  --m-m: 14px;
+  --p-m: 14px;
+  --maxWidth: 1280px; 
+
+  --overlay-color: rgba(0 0 0/ 60%);
+  --white: #fff;
+  --lightGrey: #eee;
+  --success: rgb(87, 150, 90);
+}

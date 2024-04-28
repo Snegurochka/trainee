@@ -4,7 +4,7 @@ import confettiGif from "../assets/confetti-gradient.gif";
 export const QuizWinCard = () => {
   return (
     <>
-      <img src={confettiGif} alt="confetti" />
+      <img width={230} src={confettiGif} alt="confetti" />
     </>
   );
 };

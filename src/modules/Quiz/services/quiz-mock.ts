@@ -1063,6 +1063,15 @@ const quizJs: TQuiz[] = [
     category: "JS",
     level: 2,
   },
+  {
+    id: 84,
+    question: `Improve this code:
+    const canSave = Boolean(title) && Boolean(content) && Boolean(author)`,
+    answer: `
+    const canSave = [title, content, author].every(Boolean)`,
+    category: "JS",
+    level: 2,
+  },
 ];
 
 const quizTs: TQuiz[] = [
@@ -2320,7 +2329,7 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 231,
-    question: `Create a Counter component`,
+    question: `Create an Auto Counter (Timer) component`,
     answer: `export const Counter = () => {
     const [value, setValue] = useState(1);
 
@@ -2538,15 +2547,21 @@ const quizReact: TQuiz[] = [
     answer: `import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
     export const articleApi = createApi({
       reducerPath: "articleApi",
-      baseQuery: fetchBaseQuery({ baseUrl: "t" }),
+      baseQuery: fetchBaseQuery({ baseUrl: "SERVER_URL" }),
       endpoints: (build) => ({
-        getArticles: build.query({
-            query: (params) => ""
+        getArticles: build.query<TArticles>({
+            query: (limit) => ({ 
+              url: '/articles',
+              params: { limit }
+            })
         })
       }),
     });
     
-    export const { useGetArticlesQuery } = articleApi`,
+    export const { useGetArticlesQuery } = articleApi;
+    // component 
+    const { data: articles, isLoading} = useGetArticlesQuery(5)
+    `,
     category: REACT,
     level: 2,
   },
@@ -2720,6 +2735,96 @@ const quizReact: TQuiz[] = [
         default: state
       }
     }
+    `,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 248,
+    question: `Create a slice and a thunk for Redux Toolkit. It should fetch and store posts.`,
+    answer: `export const fetchPosts = createAsyncThunk('posts/fetchPosts', () => {
+      try {
+        const response = await api.fetchPosts('url');
+        return response.data;
+      } catch (e) {
+        return e.message;
+      }
+    })
+    const postsSlice = createSlice({
+      name: 'posts',
+      initialState: {
+        posts: [],
+        isLoading: false,
+      },
+      reducers: {},
+      extraReducers(builder) {
+        builder.addCase(
+          fetchPosts.pending, (st, action)=>{
+            st.isLoading = true;
+          }
+        )
+        .addCase(
+          fetchPosts.fulfilled, (st, action)=> {
+            st.isLoading = false;
+          } 
+        )
+      }
+    })
+    `,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 248,
+    question: `Get post by ID from redux and display it in the Post component.`,
+    answer: `export const selectPostByID = (st: RootSt, Id: number) => st.posts.find(post => post.id === id);
+    // component
+    const { postId } = useParams();
+    const post = useSelector(st => selectPostById(st, Number(postId)))
+    `,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 249,
+    question: `Get posts by userId from state.posts (Redux)`,
+    answer: `const selectPostsByUserId = createSelector(
+      (state: RootState) => state.posts,
+      (state: RootState, userId: number) => userId,
+      (posts, userId) => posts.filter(post => post.userId === userId)
+      ) \n
+      // component
+      const { userId } = useParams()
+      const posts = useSelector((st) => selectPostsByUserId(st, userId))`,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 250,
+    question: `Add a new article to the server. Use RTK query.`,
+    answer: `const postApi = createApi({
+      reducerPath: 'postApi',
+      baseQuery: fetchBaseQuery({ baseUrl: 'SERVER_URL'}).
+      tagTypes: ['Post'],
+      endpoints: (build) => ({
+        fetchAllPosts: build.query({
+          query:()=>({...}),
+          providesTags: result = ['Post]
+        }),
+        addPost: build.mutation({
+          query: (post) => {
+            url: '/post',
+            method: 'POST',
+            body: post
+          },
+          invalidatesTags:['Post]
+        })
+      })
+    })
+    
+    export const { useFetchAllPostsQuery, useAddPostMutation} = postApi;
+    //component
+    const [ addPost , {isLoading}] = useAddPostMutation;
     `,
     category: REACT,
     level: 3,

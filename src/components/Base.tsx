@@ -4,5 +4,9 @@ import styled from "@emotion/styled";
 export const FlexBox = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
-  marginTop: "20px",
+});
+
+export const FlexBoxCenter = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
 });
