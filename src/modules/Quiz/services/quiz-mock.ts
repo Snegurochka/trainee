@@ -1072,6 +1072,19 @@ const quizJs: TQuiz[] = [
     category: "JS",
     level: 2,
   },
+  {
+    id: 85,
+    question: `Convert number to currency: eg 1250 -> 1 250$`,
+    answer: `
+    const formatter = new Intl.NumberFormat("en-En", {
+      style: "currency",
+      currency: "USD"
+    });
+    
+    const price = formatter.format(1234.5);`,
+    category: "JS",
+    level: 2,
+  },
 ];
 
 const quizTs: TQuiz[] = [
@@ -1868,8 +1881,9 @@ const quizReact: TQuiz[] = [
   {
     id: 213,
     question: `Create a Filter component with list of fruits. Add a filter by input value.`,
-    answer: `const Filter = () => {
-      const [fruits, setFruits] = useState(['apple', 'banana', 'orange']);
+    answer: `
+    const fruits = ['apple', 'banana', 'orange'];
+    const Filter = () => {
       const [search, setSearch] = useState('');
       const filteredFruits = fruits.filter(fruit => fruit.includes(search));
       return (
@@ -2829,6 +2843,68 @@ const quizReact: TQuiz[] = [
     category: REACT,
     level: 3,
   },
+  {
+    id: 251,
+    question: `Give an example using the useTransition hook from React 19`,
+    answer: `// component
+    const [name, setName ] = useState("");
+    const [isPending, startTransition] = useTransitions();
+    const handleSubmit = async () => {
+      startTransition(async () => {await updateName(name)})
+    }
+    
+    return <>
+      <input value={name} onChange={(e) => { setName(e.target.value)}} />
+      <button onClick={handleSubmit} disabled={isPending}>{isPending? 'Loading' : 'Update'}</button>
+    </>`,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 252,
+    question: `Convert this code for React 19 using "use"
+    const PersonComponent = () => {
+      const [person, setPerson] = useState(null);
+      useEffect(() => {
+        fetchPerson().then((data) => setPerson(data))
+      }, [])
+      return <>{person.name}</>
+    }
+    `,
+    answer: `// parent component
+    <Suspense fallback={<>Loading ...</>}
+    <PersonComponent />
+    </Suspense>
+    
+    return <>
+      <input value={name} onChange={(e) => { setName(e.target.value)}} />
+      <button onClick={handleSubmit} disabled={isPending}>{isPending? 'Loading' : 'Update'}</button>
+    </>`,
+    category: REACT,
+    level: 3,
+  },
+  {
+    id: 253,
+    question: `In case where you are working with a value that updates frequently, such as a text input.
+    Create a custom hook useDebounce() that allows you to debounce such values.
+    `,
+    answer: `const useDebounce = (value, delay) => {
+      const [debounce, setDebounce] = useState(value);
+    
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          setDebounce(value);
+        }, delay);
+        return () => {
+          cleatTimeout(timer);
+        };
+      }, [value, delay]);
+    
+      return debounce;
+    };`,
+    category: REACT,
+    level: 3,
+  },
 ];
 
 const quizTests: TQuiz[] = [
@@ -3165,24 +3241,115 @@ const quizTests: TQuiz[] = [
 const quizNext: TQuiz[] = [
   {
     id: 401,
-    question: `Create a product page \n
-    "/car/3"
+    question: `Create a product page "/car/3" for NextJs 12 and NextJS 13.
+
     Get the product ID in the product component.
     `,
-    answer: `folders: pages/car/[id].tsx \n
-
+    answer: `// NextJS 12
+    folders: pages/car/[id].tsx \n
     const CarPage: NextPage = () => {
       const { query } = useRouter();
       return <div>Car N {query.id}</div>;
-    };`,
+    };
+
+    // Next13-14
+    folders: app/car/[id]/page.tsx
+    "use client";
+    const CarPage: NextPage = ({params}: Props) => {
+      return <div>Car N {params.id}</div>;
+    };
+    `,
     category: NEXT,
     level: 4,
   },
   {
     id: 402,
     question: `Add "Go home" button in the component`,
-    answer: `const { push} = useRouter();
+    answer: `"use client";
+    // component
+    const { push} = useRouter();
     <button onClick={()=>push('/')}`,
+    category: NEXT,
+    level: 4,
+  },
+  {
+    id: 403,
+    question: `How to add a meta description and icon to an App (Next 13+)`,
+    answer: `//app/layout.tsx
+    export const metadata: Metadata = {
+      title: 'My App',
+      description: 'My app is great!',
+      icon: {
+        icon: '/icons/logo.svg'
+      }
+    } `,
+    category: NEXT,
+    level: 4,
+  },
+  {
+    id: 404,
+    question: `How to add 2 different nested page layouts for an App. 
+    For example for the authorization page and dashboard.`,
+    answer: `// use route groups 
+    // (auth)/layout.tsx + (auth)/sign-in/page.tsx
+    export default function RootLayout({
+      children,
+    }: Readonly<{
+      children: React.ReactNode;
+    }>) {
+      return <main>{children}</main>;
+    }
+    // (root)/layout.tsx + /(root)/page.tsx
+    export default function RootLayout({
+      children,
+    }: Readonly<{
+      children: React.ReactNode;
+    }>) {
+      return <main><Sidebar /> {children}</main>;
+    }
+    `,
+    category: NEXT,
+    level: 4,
+  },
+  {
+    id: 405,
+    question: `How to highlight an active link.`,
+    answer: `"use client"
+    // component
+    const pathname = usePathname();
+    const cn = pathname === '/' ? 'active' : '';
+    <Link className={cn} href="/">
+        Home
+      </Link>
+    `,
+    category: NEXT,
+    level: 4,
+  },
+  {
+    id: 405,
+    question: `How to add an Articles section and the latest comments sections on the home page.
+    Both sections should be loaded separately.  Use Next 13+`,
+    answer: `//@articles/page.tsx + loading.tsx
+    //@comments/page.tsx + loading.tsx
+    
+    // /layout.tsx
+    export default function RootLayout({
+      children,
+      articles,
+      comments
+    }: Readonly<{
+      children: React.ReactNode;
+      articles: React.ReactNode;
+      comments: React.ReactNode;
+    }>) {
+      return (
+        <main>
+          {children}
+          {articles}
+          {comments}
+        </main>
+      );
+    }`,
     category: NEXT,
     level: 4,
   },
