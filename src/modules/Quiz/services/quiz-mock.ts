@@ -1020,7 +1020,7 @@ const quizJs: TQuiz[] = [
     answer: `const getUsers = (users: TUser[]): Record<TUser['id'], Omit<TUser, 'id'>> 
     => users.reduce((acc, item) => {
       const {id, ...rest} = item;
-      return [...acc, {[id]: rest}]
+      return {...acc, {[id]: rest}}
     }, {})`,
     category: "JS",
     level: 2,
@@ -1084,6 +1084,55 @@ const quizJs: TQuiz[] = [
     const price = formatter.format(1234.5);`,
     category: "JS",
     level: 2,
+  },
+  {
+    id: 85,
+    question: `How to get price with data attributes`,
+    answer: `
+    <div id="product" data-price="45"></div>
+    // JS
+    const el = document.getElementById("product");
+    const price = el.dataset.price;`,
+    category: "JS",
+    level: 2,
+  },
+  {
+    id: 85,
+    question: `Create a debounce function, give an using example`,
+    answer: `
+    const debounce = (cb, delay = 1000) => {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(cb(...args), delay
+      }
+    }
+    // example
+    const updateText = debounce((text) => { console.log(text)});
+    const input = document.getElementById("myInput");
+    input.addEventListener("input", (e) => {updateText(e.target.value)})`,
+    category: "JS",
+    level: 2,
+    comment: "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified"
+  },
+  {
+    id: 86,
+    question: `Solve a console log issue:
+    console.log(1);
+    const a = new Promise((resolve, reject) => {
+      console.log(2);
+      reject();
+    });
+    a.then(() => console.log(3))
+    .catch(() => console.log(4))
+    .then(() => console.log(5));
+    console.log(6);
+    `,
+    answer: `
+    1 - 2 - 6 - 4 - 5`,
+    category: "JS",
+    level: 2,
+    comment: "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified"
   },
 ];
 
@@ -2314,20 +2363,21 @@ const quizReact: TQuiz[] = [
     question: `There is a carousel component. 
     export const GalleryPreview = ({
       currentPhotoIndex,
-      photo
+      photos
     }: {
       currentPhotoIndex: number;
-      photo: TPhoto;
+      photos: TPhoto[];
     }) => {
-      return <div>...</div>;
+      return <div>{photos.map(...)}</div>;
     };
-    You need to add an animation effect (translate3d(...)).`,
+    You need to add an animation effect (translate3d(...)).
+    For moving active element to the left.`,
     answer: `export const GalleryPreview = ({
       currentPhotoIndex,
-      photo
+      photos
     }: {
       currentPhotoIndex: number;
-      photo: TPhoto;
+      photos: TPhoto[];
     }) => {
       const galleryRef = useRef<HTMLDivElement>(null);
       useEffect(() => {
@@ -2336,10 +2386,11 @@ const quizReact: TQuiz[] = [
         galleryRef.current.style.transform = \`translate3d
         (-\${currentPhotoIndex * 180}px 0 0)\`
       }, [currentPhotoIndex])
-      return <div ref={galleryRef}></div>;
+      return <div ref={galleryRef}>{photos.map(...)}</div>;
     };`,
     category: REACT,
     level: 2,
+    comment: "https://youtu.be/kXiLmTvGIdU?si=3P0vtEuKB0Fgs_GV&t=3694"
   },
   {
     id: 231,
@@ -2791,10 +2842,11 @@ const quizReact: TQuiz[] = [
   {
     id: 248,
     question: `Get post by ID from redux and display it in the Post component.`,
-    answer: `export const selectPostByID = (st: RootSt, Id: number) => st.posts.find(post => post.id === id);
+    answer: `// use a currying approach to tackle the issue
+    export const selectPostByID = (id: number) => (st: RootSt) => st.posts.find(post => post.id === id);
     // component
     const { postId } = useParams();
-    const post = useSelector(st => selectPostById(st, Number(postId)))
+    const post = useSelector(selectPostById(Number(postId))
     `,
     category: REACT,
     level: 3,
@@ -2904,6 +2956,24 @@ const quizReact: TQuiz[] = [
     };`,
     category: REACT,
     level: 3,
+    comment: 'https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions'
+  },
+  {
+    id: 253,
+    question: `Create a generic list component. It should accept list of elements and render function`,
+    answer: `const UL = 
+      <T>({
+        items, 
+        render})
+        : React.DetailedHTMLProps<....> & {
+          items : T[], 
+          render: (item: T) => ReactNode
+        }=> {
+      return (<ul>{items.map((item, ind) => (<li key={ind}>{render(item)}</li>))}</ul>)
+    }`,
+    category: REACT,
+    level: 3,
+    comment: 'https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions'
   },
 ];
 
@@ -3355,9 +3425,9 @@ const quizNext: TQuiz[] = [
   },
 ];
 
-const quizOther: TQuiz[] = [
+const quizCSS: TQuiz[] = [
   {
-    id: 901,
+    id: 801,
     question: `Convert this CSS to SCSS
     .gallery {
       position: relative;
@@ -3389,11 +3459,53 @@ const quizOther: TQuiz[] = [
         }
       }
     }`,
-    category: "Other",
+    category: "CSS",
     level: 1,
   },
   {
-    id: 902,
+    id: 802,
+    question: `How to add css variables?`,
+    answer: `:root {
+      --main-color: blue;
+    }
+    .my-element {
+      color: var(--main-color);
+    }`,
+    category: "CSS",
+    level: 1,
+  },
+  {
+    id: 803,
+    question: `How to rotate a div`,
+    answer: `div {transform: rotate(90deg)}`,
+    category: "CSS",
+    level: 1,
+  },
+  {
+    id: 804,
+    question: `How to make a button bigger when hovering. It should be smooth`,
+    answer: `
+    button { transition: transform 100ms}
+    button:hover { transform: scale(1.2)}`,
+    category: "CSS",
+    level: 1,
+  },
+  {
+    id: 805,
+    question: `How to centered element using translate`,
+    answer: `div {
+      position: absolute; 
+      top: 0; 
+      left: 50%; 
+      transform: translate(-50%)}`,
+    category: "CSS",
+    level: 1,
+  },
+]
+
+const quizOther: TQuiz[] = [
+  {
+    id: 901,
     question: `Configure WebPack with different entry points`,
     answer: `module.exports = {
       entry: {
@@ -3408,7 +3520,7 @@ const quizOther: TQuiz[] = [
     level: 3,
   },
   {
-    id: 903,
+    id: 902,
     question: `How to configure WebPack with TS`,
     answer: `We need to use loaders (ts-loader)
     module.exports = {
@@ -3426,19 +3538,33 @@ const quizOther: TQuiz[] = [
   },
   {
     id: 903,
-    question: `How to add css variables?`,
-    answer: `:root {
-      --main-color: blue;
-    }
-    .my-element {
-      color: var(--main-color);
-    }`,
+    question: `How to configure WebPack in develope mode. 
+    It should be controlled using a terminal command.
+    Eg: npm run build:dev`,
+    answer: `// command should be saved in package.json
+    // "build:dev" : "webpack --env mode=development"
+    // configuration in webpack.config.ts
+    module.exports = (env) => ({
+      mode: env.mode ?? 'development,
+      entry: {...},
+      output: {...},
+    })`,
+    category: "Other",
+    level: 3,
+  },
+  {
+    id: 904,
+    question: `How to undo a commit?`,
+    answer: `// git reset <hash> - will erase all commits before this one, but it added changes to the files (you can save them)
+    // git reset --hard <hash> - will erase all commits and changes before this one
+    // git reverse <hash> - added a new commit with rolled back changes from this commit`,
     category: "Other",
     level: 3,
   },
 ];
 
 export const quiz = [
+  ...quizCSS,
   ...quizJs,
   ...quizReact,
   ...quizTs,

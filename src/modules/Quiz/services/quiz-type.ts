@@ -6,4 +6,5 @@ export type TQuiz = {
   answer: string;
   category: TCategoriesNames;
   level: number;
+  comment?: string;
 };

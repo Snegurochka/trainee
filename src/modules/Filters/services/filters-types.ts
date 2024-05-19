@@ -11,4 +11,5 @@ export type TCategoriesNames =
   | "REACT"
   | "TESTS"
   | "Next"
+  | "CSS"
   | "Other";
