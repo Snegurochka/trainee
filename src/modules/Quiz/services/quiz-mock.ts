@@ -1113,7 +1113,8 @@ const quizJs: TQuiz[] = [
     input.addEventListener("input", (e) => {updateText(e.target.value)})`,
     category: "JS",
     level: 2,
-    comment: "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified"
+    comment:
+      "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified",
   },
   {
     id: 86,
@@ -1132,7 +1133,24 @@ const quizJs: TQuiz[] = [
     1 - 2 - 6 - 4 - 5`,
     category: "JS",
     level: 2,
-    comment: "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified"
+    comment:
+      "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified",
+  },
+  {
+    id: 87,
+    question: `Sort an array via date
+    const arr = [
+      {date: "10.10.2010"},
+      {date: "05.05.2015"},
+      {date: "26.10.2020"},
+      {date: "02.12.2012"}
+    ]`,
+    answer: `
+    arr.sort((a,b) => new Date(a.date) - new Date(b.date))`,
+    category: "JS",
+    level: 2,
+    comment:
+      "https://www.youtube.com/watch?v=cjIswDCKgu0&ab_channel=WebDevSimplified",
   },
 ];
 
@@ -2111,7 +2129,11 @@ const quizReact: TQuiz[] = [
       console.log('next state', store.getState());
       return result
     }
-    const store = createStore(reducer, undefined, applyMiddleware(logger))`,
+    const store = createStore(reducer, undefined, applyMiddleware(logger)) // deprecated in RToolKit
+    const store = configureStore({
+      reducer,
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
+    }); // new approach for RToolKit`,
     category: REACT,
     level: 3,
   },
@@ -2390,7 +2412,7 @@ const quizReact: TQuiz[] = [
     };`,
     category: REACT,
     level: 2,
-    comment: "https://youtu.be/kXiLmTvGIdU?si=3P0vtEuKB0Fgs_GV&t=3694"
+    comment: "https://youtu.be/kXiLmTvGIdU?si=3P0vtEuKB0Fgs_GV&t=3694",
   },
   {
     id: 231,
@@ -2501,25 +2523,24 @@ const quizReact: TQuiz[] = [
     Why can't we use a useCallback?
     Create a hook useEvent(fn), it should return memoizable link to fn and accept args.`,
     answer: `export const useEvent = <T extends (...args: any[]) => any>(cb: T) => {
-      const cbRef = useRef(cb);
+      const cbRef = useRef(null);
     
       useLayoutEffect(() => {
         cbRef.current = cb;
-      }, [cb]);
+      }, []);
     
-      const eventCb = useCallback(
+      return useCallback(
         (...args: Parameters<T>) => {
           return cbRef.current.apply(null, args);
         },
-        [cbRef]
+        []
       );
-    
-      return eventCb;
     };
     // using
-    onClick = useEvent(text=>{ // action })`,
+    const onClick = useEvent((text)=>{ // action })`,
     category: REACT,
     level: 2,
+    comment: 'https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ'
   },
   {
     id: 236,
@@ -2551,6 +2572,7 @@ const quizReact: TQuiz[] = [
     }`,
     category: REACT,
     level: 2,
+    comment: 'https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ'
   },
   {
     id: 237,
@@ -2660,7 +2682,7 @@ const quizReact: TQuiz[] = [
       yield takeLatest('LOGOUT', logout);
     }`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 243,
@@ -2688,7 +2710,7 @@ const quizReact: TQuiz[] = [
       yield takeLatest('PRODUCTS__GET', getProductWorker)
     } `,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 244,
@@ -2713,7 +2735,7 @@ const quizReact: TQuiz[] = [
       }, 
     });`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 245,
@@ -2730,7 +2752,7 @@ const quizReact: TQuiz[] = [
       },
     });`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 246,
@@ -2756,7 +2778,7 @@ const quizReact: TQuiz[] = [
     return result
     }`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 246,
@@ -2764,7 +2786,7 @@ const quizReact: TQuiz[] = [
     answer: `export const CompAsync = lazy(() => import("./Comp"));
     and add <Suspense fallback={<Loading />}>...routes</Suspense>`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 247,
@@ -2802,7 +2824,7 @@ const quizReact: TQuiz[] = [
     }
     `,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 248,
@@ -2837,7 +2859,7 @@ const quizReact: TQuiz[] = [
     })
     `,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 248,
@@ -2849,7 +2871,7 @@ const quizReact: TQuiz[] = [
     const post = useSelector(selectPostById(Number(postId))
     `,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 249,
@@ -2863,7 +2885,7 @@ const quizReact: TQuiz[] = [
       const { userId } = useParams()
       const posts = useSelector((st) => selectPostsByUserId(st, userId))`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 250,
@@ -2893,7 +2915,7 @@ const quizReact: TQuiz[] = [
     const [ addPost , {isLoading}] = useAddPostMutation;
     `,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 251,
@@ -2910,7 +2932,7 @@ const quizReact: TQuiz[] = [
       <button onClick={handleSubmit} disabled={isPending}>{isPending? 'Loading' : 'Update'}</button>
     </>`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 252,
@@ -2933,15 +2955,15 @@ const quizReact: TQuiz[] = [
       <button onClick={handleSubmit} disabled={isPending}>{isPending? 'Loading' : 'Update'}</button>
     </>`,
     category: REACT,
-    level: 3,
+    level: 2,
   },
   {
     id: 253,
     question: `In case where you are working with a value that updates frequently, such as a text input.
     Create a custom hook useDebounce() that allows you to debounce such values.
     `,
-    answer: `const useDebounce = (value, delay) => {
-      const [debounce, setDebounce] = useState(value);
+    answer: `const useDebounce = <T>(value:T, delay = 500) => {
+      const [debounce, setDebounce] = useState<T>(value);
     
       useEffect(() => {
         const timer = setTimeout(() => {
@@ -2953,14 +2975,22 @@ const quizReact: TQuiz[] = [
       }, [value, delay]);
     
       return debounce;
-    };`,
+    };
+    // component
+    const [search, setSearch] = useState('');
+    const debouncedSearch = useDebounce(search);
+    useEffect(()=>{
+      // fetching debouncedSearch
+    }, [debouncedSearch])
+    `,
     category: REACT,
-    level: 3,
-    comment: 'https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions'
+    level: 2,
+    comment:
+      "https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions",
   },
   {
-    id: 253,
-    question: `Create a generic list component. It should accept list of elements and render function`,
+    id: 254,
+    question: `Create a generic list component <UL />. It should accept list of elements and render function`,
     answer: `const UL = 
       <T>({
         items, 
@@ -2968,12 +2998,294 @@ const quizReact: TQuiz[] = [
         : React.DetailedHTMLProps<....> & {
           items : T[], 
           render: (item: T) => ReactNode
-        }=> {
+        } => {
       return (<ul>{items.map((item, ind) => (<li key={ind}>{render(item)}</li>))}</ul>)
     }`,
     category: REACT,
-    level: 3,
-    comment: 'https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions'
+    level: 2,
+    comment:
+      "https://www.youtube.com/watch?v=W5TXxJIyBP0&ab_channel=JackHerrington",
+  },
+  {
+    id: 255,
+    question: `Create a counter app. 
+    It should stop updating shown value, when the mouse is hovering h1.
+    But the inner timer should not stop.
+    If the mouse leaves h1 it should start updating the shown counter.
+
+    export const Counter = () => {
+      const counter = 0;
+   
+      return <h1>{counter}</h1>;
+    };`,
+    answer: `export const Counter = () => {
+    const [counter, setCounter] = useState(0);
+    const [isHover, setIsHover] = useState(false);
+    const [fixed, setFixed] = useState(0);
+
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCounter((st) => st + 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }, []);
+
+    const handlerMouseOver = (e) => {
+      setIsHover(true);
+      setFixed(counter);
+    };
+
+    const handlerMouseOut = () => {
+      setIsHover(false);
+    };
+
+    return (
+      <h1 onMouseOver={handlerMouseOver} onMouseOut={handlerMouseOut}>
+        {!isHover ? counter : fixed}
+      </h1>
+    );
+  };`,
+    category: REACT,
+    level: 2,
+  },
+  {
+    id: 256,
+    question: `How to cancel the fetch request and why it can happen?
+    export const Todos = () => {
+      const [todos, setTodos ] = useState([]);
+
+      useEffect(() => {
+        fetch("api/todos")
+        .then((result) => result.json())
+        .then((data) => setTodos(data))
+      }, [])
+
+      return <div>....</div>
+    }`,
+    answer: `export const Todos = () => {
+      const [todos, setTodos ] = useState([]);
+
+      useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        fetch("api/todos", {signal})
+        .then((result) => result.json())
+        .then((data) => setTodos(data));
+
+        return () => { controller.abort(); }
+      }, [])
+
+      return <div>....</div>
+    }`,
+    category: REACT,
+    level: 2,
+    comment:
+      "https://www.youtube.com/watch?v=gwIkg1acujU&ab_channel=CosdenSolutions",
+  },
+  {
+    id: 257,
+    question: `Create logic for todos App. Use Redux Tool Kit. 
+    It should fetch todos.`,
+    answer: `export const fetchTodos = createAsyncThunk(
+      "todos/fetchTodos",
+      async (_, { rejectWithValue }) => {
+        try {
+          const result = await fetch("/todos");
+          if (!result.ok) {
+            throw new Error("fetching error");
+          }
+          const data = await result.json();
+          return data;
+        } catch (e) {
+          console.log(e);
+          rejectWithValue(e.message);
+        }
+      }
+    );
+    
+    type TTodo = {
+      id: string;
+      title: string;
+    };
+    
+    export const todosSlice = createSlice({
+      name: "todos",
+      initialState: {
+        todos: [] as TTodo[],
+        isLoading: false,
+        error: "",
+      },
+      reducers: {},
+      extraReducers(builder) {
+        builder
+          .addCase(fetchTodos.pending, (st) => {
+            st.isLoading = true;
+          })
+          .addCase(fetchTodos.fulfilled, (st, action) => {
+            st.todos = action.payload;
+            st.isLoading = false;
+          })
+          .addCase(fetchTodos.rejected, (st, action) => {
+            st.isLoading = false;
+            st.error = action.payload;
+          });
+      },
+    });
+    
+    export default todosSlice.reducer;`,
+    category: REACT,
+    level: 2,
+    comment:
+      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+  },
+  {
+    id: 258,
+    question: `Create logic for todos App. Use Redux Tool Kit. 
+    It should add and remove todos.`,
+    answer: `export const deleteTodo = createAsyncThunk(
+      "todos/deleteTodo",
+      async (id, { rejectWithValue, dispatch }) => {
+        try {
+          const result = await fetch("/todos/"+id, {
+            method: "DELETE",
+          });
+          if (!result.ok) {
+            throw new Error("adding error");
+          }
+          dispatch(removeTodo({ id }));
+        } catch (e) {
+          console.log(e);
+          rejectWithValue(e.message);
+        }
+      }
+    );
+    
+    type TTodo = {
+      id: string;
+      title: string;
+    };
+    
+    export const todosSlice = createSlice({
+      name: "todos",
+      initialState: {
+        todos: [] as TTodo[],
+        isLoading: false,
+        error: "",
+      },
+      reducers: {
+        addTodo(st, action) {
+          st.todos.push(action.payload);
+        },
+        removeTodo(st, action) {
+          st.todos = st.todos.filter((item) => item.id !== action.payload.id);
+        },
+      },
+      extraReducers(builder) {
+        builder
+          .addCase(addTodo.rejected, (st, action) => {
+            st.error = action.payload;
+          });
+      },
+    });
+    
+    export const { addTodo, removeTodo } = todosSlice.actions;
+    export default todosSlice.reducer;`,
+    category: REACT,
+    level: 2,
+    comment:
+      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+  },
+  {
+    id: 259,
+    question: `Create logic for todos App. Use Redux Tool Kit. 
+    It should toggle status for todos.
+
+    type TTodo = {
+      id: string;
+      title: string;
+      complete: boolean;
+    };`,
+    answer: `export const toggleStatus = createAsyncThunk(
+      "todos/toggleStatus",
+      async (id, { rejectWithValue, dispatch, getState }) => {
+        const todo: TTodo = getState().todos.todos.find((item) => item.id === id);
+        try {
+          const result = await fetch("/todos/" + id, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ complete: !todo.complete }),
+          });
+          if (!result.ok) {
+            throw new Error("adding error");
+          }
+          dispatch(toggleTodo({ id }));
+        } catch (e) {
+          console.log(e);
+          rejectWithValue(e.message);
+        }
+      }
+    );
+    
+    type TTodo = {
+      id: string;
+      title: string;
+      complete: boolean;
+    };
+    
+    export const todosSlice = createSlice({
+      name: "todos",
+      initialState: {
+        todos: [] as TTodo[],
+        isLoading: false,
+        error: "",
+      },
+      reducers: {
+        toggleTodo(st, action) {
+          const todo = st.todos.find((item) => item.id === action.payload.id);
+          if (todo) {
+            todo.complete = !todo.complete;
+          }
+        },
+      },
+      extraReducers(builder) {},
+    });
+    
+    export const { toggleTodo } = todosSlice.actions;
+    export default todosSlice.reducer;`,
+    category: REACT,
+    level: 2,
+    comment:
+      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+  },
+  {
+    id: 260,
+    question: `Create useLocalStorage hook.`,
+    answer: `import { useEffect, useState } from "react";
+
+    const getSavedValue = <T>(key: string, initialValue: T) => {
+      const savedValue = localStorage.getItem(key);
+      if (savedValue) {
+        return JSON.parse(savedValue);
+      }
+      return initialValue;
+    };
+    
+    export const useLocalStorage = <T>(key: string, initialValue: T) => {
+      const [value, setValue] = useState(() => getSavedValue(key, initialValue));
+    
+      useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value));
+      }, [value]);
+    
+      return [value, setValue];
+    };`,
+    category: REACT,
+    level: 2,
+    comment:
+      "https://youtu.be/6ThXsUwLWvc?si=KPtphtrac5VYUejD",
   },
 ];
 
@@ -3186,11 +3498,22 @@ const quizTests: TQuiz[] = [
     id: 311,
     question: `Cover the function delay with test:
 
-    const delay = (cb, ms) => new Promise((resolve) => {
-      setTimeout(() => resolve(cb()), ms)
+    const delay = (cb: CallableFunction, ms: number) => new Promise((resolve) => {
+      const timerId = setTimeout(() => {
+        resolve(cb()); // Execute the callback and resolve the promise
+      }, ms);
+  
+      // Optional: Add functionality to clear the timeout if needed
+      return () => clearTimeout(timerId);
     }) 
     `,
-    answer: `it("should call async callback", async () => {
+    answer: `
+    it("should call async callback", async () => {
+      const mockFn = jest.fn(() => true);
+      await delay(mockFn, 5000);
+      expect(mockFn).toBeCalledTimes(1);
+    });
+    it("should make calculation", async () => {
       const result = await delay(() => 5+5, 5000);
       expect(result).toBe(10)
     });`,
@@ -3230,8 +3553,8 @@ const quizTests: TQuiz[] = [
     level: 3,
   },
   {
-    id: 312,
-    question: `Add test for component, check is toggler works:
+    id: 313,
+    question: `Add test for component, check if toggler works:
 
     export const SideBar = () => {
       const [isOpened, toggleIsOpened] = useState(true);
@@ -3262,7 +3585,7 @@ const quizTests: TQuiz[] = [
     level: 3,
   },
   {
-    id: 313,
+    id: 314,
     question: `Add test for async Thunk:
 
     export const fetchPet = createAsyncThunk(
@@ -3305,6 +3628,51 @@ const quizTests: TQuiz[] = [
     });`,
     category: TESTS,
     level: 3,
+    comment: 'https://youtu.be/qb7xVPVfPlQ?si=m0uf5616ej0kDk9l',
+  },
+  {
+    id: 315,
+    question: `Add test for async Thunk:
+
+    const fetchTodos = createAsyncThunk("todos/fetchTodos", async (_, { rejectWithValue }) => {
+      try {
+        const result = await fetch("/todos");
+        if (!result.ok) {
+          throw new Error("fetching error");
+        }
+        const data = await result.json();
+        return data;
+      } catch (e) {
+        console.log(e);
+        return rejectWithValue(error.message);
+      }
+    });`,
+    answer: `
+    import { fetchTodos } from "./todos-slice.answer";
+    global.fetch = jest.fn();
+    it("should fetch data", async () => {
+      const mockTodos = [
+      {
+        id: "123",
+        title: "test",
+      },];
+      const mockResult = {
+        ok: true,
+        json: () => Promise.resolve(mockTodos),
+      };
+      const dispatch = jest.fn();
+      const getState = () => {};
+      fetch.mockResolvedValue(mockResult);
+
+      const thunk = fetchTodos();
+      const result = await thunk(dispatch, getState);
+  
+      expect(result.meta.requestStatus).toBe('fulfilled');
+    });
+    `,
+    category: TESTS,
+    level: 3,
+    comment: 'https://youtu.be/qb7xVPVfPlQ?si=5lpj8pGJwk84WlPk',
   },
 ];
 
@@ -3501,7 +3869,7 @@ const quizCSS: TQuiz[] = [
     category: "CSS",
     level: 1,
   },
-]
+];
 
 const quizOther: TQuiz[] = [
   {
@@ -3543,7 +3911,7 @@ const quizOther: TQuiz[] = [
     Eg: npm run build:dev`,
     answer: `// command should be saved in package.json
     // "build:dev" : "webpack --env mode=development"
-    // configuration in webpack.config.ts
+    // configuration in webpack.config.ts - you need to pass "env"
     module.exports = (env) => ({
       mode: env.mode ?? 'development,
       entry: {...},
@@ -3554,6 +3922,24 @@ const quizOther: TQuiz[] = [
   },
   {
     id: 904,
+    question: `How to run server on 3000 port using webpack.`,
+    answer: `// first install "webpack-dev-server"
+    // command should be saved in package.json
+    // "start" : "webpack serve --env port=3000"
+    // configuration in webpack.config.ts - you need to pass "env"
+    module.exports = (env) => ({
+      entry: {...},
+      output: {...},
+      devServer: {
+        port: env.port,
+        open: true,
+      },
+    })`,
+    category: "Other",
+    level: 3,
+  },
+  {
+    id: 905,
     question: `How to undo a commit?`,
     answer: `// git reset <hash> - will erase all commits before this one, but it added changes to the files (you can save them)
     // git reset --hard <hash> - will erase all commits and changes before this one
@@ -3564,11 +3950,11 @@ const quizOther: TQuiz[] = [
 ];
 
 export const quiz = [
-  ...quizCSS,
   ...quizJs,
-  ...quizReact,
   ...quizTs,
+  ...quizReact,
   ...quizTests,
   ...quizNext,
+  ...quizCSS,
   ...quizOther,
 ];
