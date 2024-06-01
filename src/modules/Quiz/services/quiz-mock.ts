@@ -2540,7 +2540,7 @@ const quizReact: TQuiz[] = [
     const onClick = useEvent((text)=>{ // action })`,
     category: REACT,
     level: 2,
-    comment: 'https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ'
+    comment: "https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ",
   },
   {
     id: 236,
@@ -2572,17 +2572,26 @@ const quizReact: TQuiz[] = [
     }`,
     category: REACT,
     level: 2,
-    comment: 'https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ'
+    comment: "https://youtu.be/XOSgHVzHEV4?si=-uUuVmNblTwBYyiQ",
   },
   {
     id: 237,
-    question: `Add extra types for hook useWindowEvent, it should support CustomWindowEvent types:
-    Base: const useWindowEvent = (type: string, cb: (e: Event) => void):void => {}`,
+    question: `
+    You have hook:
+    const useWindowEvent = (type: string, cb: (e: Event) => void):void => {}
+    But when you try to use it with window events, it does not support its own properties.
+    Eg: 
+    const Component = () => {
+      useWindowEvent("mousemove", (e) => {
+        e.clientX; // error - it does not know clientX
+      });
+    };
+    Add extra types for hook useWindowEvent, it should support "GetWindowEvent" types.`,
     answer: `
-    type CustomWindowEvent<T extends string> = T extends keyof WindowEventMap
+    type GetWindowEvent<T extends string> = T extends keyof WindowEventMap
     ? windowEventMap[T]
     : Event
-    function useWindowEvent<T extends string>(type: T, cb(e: CustomWindowEvent<T>)) => void 
+    function useWindowEvent<T extends string>(type: T, cb(e: GetWindowEvent<T>)) => void 
     function useWindowEvent (type: string, cb: (e: Event) => void): void {}`,
     category: REACT,
     level: 2,
@@ -3136,14 +3145,37 @@ const quizReact: TQuiz[] = [
     export default todosSlice.reducer;`,
     category: REACT,
     level: 2,
-    comment:
-      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+    comment: "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
   },
   {
     id: 258,
     question: `Create logic for todos App. Use Redux Tool Kit. 
     It should add and remove todos.`,
-    answer: `export const deleteTodo = createAsyncThunk(
+    answer: `
+    export const addTodos = createAsyncThunk(
+      "todos/addTodo",
+      async (todo, { rejectWithValue, dispatch }) => {
+        try {
+          const result = await fetch("/todos", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(todo),
+          });
+    
+          if (!result.ok) {
+            throw new Error("adding error");
+          }
+    
+          dispatch(addTodo(todo));
+        } catch (e) {
+          console.log(e);
+          rejectWithValue(e.message);
+        }
+      }
+    );
+    export const deleteTodo = createAsyncThunk(
       "todos/deleteTodo",
       async (id, { rejectWithValue, dispatch }) => {
         try {
@@ -3193,8 +3225,7 @@ const quizReact: TQuiz[] = [
     export default todosSlice.reducer;`,
     category: REACT,
     level: 2,
-    comment:
-      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+    comment: "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
   },
   {
     id: 259,
@@ -3257,8 +3288,7 @@ const quizReact: TQuiz[] = [
     export default todosSlice.reducer;`,
     category: REACT,
     level: 2,
-    comment:
-      "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
+    comment: "https://youtu.be/6RTbC8Acj1M?si=ZWgeWmY0u3ZA-iNR",
   },
   {
     id: 260,
@@ -3284,8 +3314,144 @@ const quizReact: TQuiz[] = [
     };`,
     category: REACT,
     level: 2,
-    comment:
-      "https://youtu.be/6ThXsUwLWvc?si=KPtphtrac5VYUejD",
+    comment: "https://youtu.be/6ThXsUwLWvc?si=KPtphtrac5VYUejD",
+  },
+  {
+    id: 261,
+    question: `Create a styled component for "a". 
+    It should do not have underline when not hovering
+    and has one when hovering. The color can be passed via tag.`,
+    answer: `export const AppNavLink = styled(NavLink)<{ color: string }>\`
+    text-decoration: none;
+    color: \${(props) => props.color};
+  
+    &:hover {
+      text-decoration: underline;
+    }
+    \`;
+    `,
+    category: REACT,
+    level: 2,
+  },
+  {
+    id: 262,
+    question: `Create a theme toggler (dark - light).
+    Use styled components. `,
+    answer: `// add theme scheme
+    const darkTheme = {
+      color: white
+    }
+    const lightTheme = {
+      color: black
+    }
+
+    //wrap app with the theme provider from the styled components
+    const currentTheme = useSelector(s => s.theme.currentTheme);
+    const theme = currentTheme === 'dark' ? darkTheme : lightTheme;
+    <ThemeProvider theme={theme}>
+    <App />
+    </ThemeProvider>
+
+    // in toggler component
+    const currentTheme = useSelector(s => s.theme.currentTheme);
+    const toggle = () => {
+      dispatch({
+        action: TOGGLE_THEME
+      })
+    }
+    `,
+    category: REACT,
+    level: 2,
+  },
+  {
+    id: 262,
+    question: `Convert this CSS to styled components:
+    .toggle-switch {
+      position: relative;
+      // ..styles
+    }
+    .toggle-switch input[type="checkbox"] {
+      display: none;
+    }
+    .toggle-switch .switch {
+      position: absolute;
+      background-color: #b6b6b6;
+      transition: background-color 0.2s ease;
+      // .. styles
+    }
+    .toggle-switch .switch::before {
+      position: absolute;
+      content: "";
+      left: 2px;
+      top: 2px;
+      width: 21px;
+      height: 21px;
+      background-color: #333;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .toggle-switch input[type="checkbox"]:checked + .switch::before {
+      transform: translateX(25px);
+      background-color: #333;
+    }
+    .toggle-switch input[type="checkbox"]:checked + .switch {
+      background-color: #2bc6ff;
+    }
+    `,
+    answer: `const Panel = styled.div\`
+    position: absolute;
+    cursor: pointer;
+    background-color: \${(props) => props.theme.primary};
+    border-radius: 25px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: background-color 0.2s ease;
+  \`;
+  
+  const Circle = styled.div\`
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 21px;
+    height: 21px;
+    background-color: \${(props) => props.theme.text};
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  \`;
+  
+  const SwitchWrapper = styled.label\`
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+    margin: 0 0.75rem;
+  
+    input[type="checkbox"] {
+      display: none;
+    }
+  
+    input[type="checkbox"]:checked + \${Panel} > \${Circle} {
+      transform: translateX(25px);
+      background-color: \${(props) => props.theme.text};
+    }
+  
+    input[type="checkbox"]:checked + \${Panel} {
+      background-color: \${(props) => props.theme.secondary};
+    }
+  \`;
+
+  // components
+  <SwitchWrapper>
+  <input type="checkbox" checked={isToggled} onChange={onToggle} />
+  <Panel>
+    <Circle />
+  </Panel>
+</SwitchWrapper>
+    `,
+    category: REACT,
+    level: 2,
   },
 ];
 
@@ -3628,7 +3794,7 @@ const quizTests: TQuiz[] = [
     });`,
     category: TESTS,
     level: 3,
-    comment: 'https://youtu.be/qb7xVPVfPlQ?si=m0uf5616ej0kDk9l',
+    comment: "https://youtu.be/qb7xVPVfPlQ?si=m0uf5616ej0kDk9l",
   },
   {
     id: 315,
@@ -3672,7 +3838,7 @@ const quizTests: TQuiz[] = [
     `,
     category: TESTS,
     level: 3,
-    comment: 'https://youtu.be/qb7xVPVfPlQ?si=5lpj8pGJwk84WlPk',
+    comment: "https://youtu.be/qb7xVPVfPlQ?si=5lpj8pGJwk84WlPk",
   },
 ];
 
