@@ -90,10 +90,15 @@ const quizJs: TQuiz[] = [
     id: 9,
     question: `Create function pick(obj, keys) that returns a new object with only the keys specified in the array keys (in TS) \n
     pick(user, 'name', 'age')`,
-    answer: `const pick = <T, K extends string & keyof T>(obj: T, ...keys: K[]): Pick<T, K> => {
+    answer: `
+    // way 1
+    const pick = <T, K extends string & keyof T>(obj: T, ...keys: K[]): Pick<T, K> => {
       return Object.entries(obj)
       .filter(([key]: Array<K>) => keys.includes(key))
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Pick<T, K>;
+    // way 2
+    const pick = <T extends {}, K extends keyof T>(Obj: T, ...keys: K[]) =>
+      keys.reduce((acc, key) => ({ ...acc, [key]: Obj[key] }), {});  
       `,
     category: "JS",
     level: 2,
@@ -623,10 +628,10 @@ const quizJs: TQuiz[] = [
       { name: 'John', age: 25 },
       { name: 'Adam', age: 30 },
       ];
-      const sortedUsers = users.sort((a, b) => a.name.localeCompare(b.name));
+      users.sort((a, b) => a.name.localeCompare(b.name));
       
       // or
-      const sortedUsers = users.sort((a, b) => {
+      users.sort((a, b) => {
         if (a.name < b.name) {
           return -1;
         }
@@ -770,11 +775,12 @@ const quizJs: TQuiz[] = [
     id: 64,
     question: `Create a win lottery function that returns a promise. 
     The function should have a 50% chance of winning the lottery (resolve) 
-    and a 50% chance of losing it (reject).`,
+    and a 50% chance of losing it (reject).
+    It should have a 500ms delay.`,
     answer: `const lotteryPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         Math.random() >= 0.5 ? resolve('You win') : reject('You lose');
-        }, 2000);
+        }, 500);
         });
       lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));`,
     category: "JS",
@@ -1099,18 +1105,19 @@ const quizJs: TQuiz[] = [
   {
     id: 85,
     question: `Create a debounce function, give an using example`,
-    answer: `
+    answer: `// debounce function should return a function!
     const debounce = (cb, delay = 1000) => {
       let timer;
       return (...args) => {
         clearTimeout(timer);
-        timer = setTimeout(cb(...args), delay
+        timer = setTimeOut(() => {cb(...args)}, delay)
       }
     }
     // example
-    const updateText = debounce((text) => { console.log(text)});
+    const updateText = debounce((text) => { console.log(text)}); // it returns a function
     const input = document.getElementById("myInput");
-    input.addEventListener("input", (e) => {updateText(e.target.value)})`,
+    input.addEventListener("input", (e) => {updateText(e.target.value)}) // so we can call it and pass arguments
+    `, 
     category: "JS",
     level: 2,
     comment:
@@ -1201,13 +1208,10 @@ const quizTs: TQuiz[] = [
   },
   {
     id: 103,
-    question: `You have a function that can receive a union type argument. \n
+    question: `You have a function that can receive a union type argument (obj: { a: number } | { b: string }). \n
     It is necessary to check the presence of the property and return it. \n`,
-    answer: `const getProp = (obj: { a: number } | { b: string }) => {
-        if ('a' in obj) {
-          return obj.a;
-        }
-        return obj.b;
+    answer: `const getProp = (obj: { a: number } | { b: string }): number | string => {
+        return 'a' in obj ? obj.a : obj.b;
     };`,
     category: "TS",
     level: 1,
@@ -1801,6 +1805,34 @@ const quizTs: TQuiz[] = [
     category: "TS",
     level: 2,
   },
+  {
+    id: 153,
+    question: `How to improve this code:
+    type ErrorData = {
+      error: string | number;
+      payload?: Record<string, string | number>;
+    }
+    const ErrorData = {
+      error: 'Timeout',
+      payload: {
+        status: 500,
+      }
+    } as ErrorData;
+    `,
+    answer: ` // use "satisfies" instead of "as"
+    type ErrorData = {
+      error: string | number;
+      payload?: Record<string, string | number>;
+    }
+    const ErrorData = {
+      error: 'Timeout',
+      payload: {
+        status: 500,
+      }
+    } satisfies ErrorData;`,
+    category: "TS",
+    level: 2,
+  },
 ];
 
 const quizReact: TQuiz[] = [
@@ -2324,59 +2356,51 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 229,
-    question: `There is a Gallery module, 
-    type TGalleryProps = {
-      photo: TPhoto[], 
-      options? : TOptions
-    }
-    export const Gallery = ({photo, options = {}}:TGalleryProps) => {
-      return <div>
-        {photo.map((item) => <img key={item.id} width="100" src={item.src} />)}
-      </div>
-    }
-    You need to create navigation buttons`,
-    answer: `// add to Gallery
-    const [currentPhoto, setCurrentPhoto] = useState(0);
-    const [nextPhoto, setNextPhoto] = useState(currentPhoto + 1);
-    const [prevPhoto, setPrevPhoto] = useState(currentPhoto - 1);
+    question: `Create a UIKit button. It should accept param "buttonTypes: [
+      'primary', 'secondary', 'outlined', 'ghost', ]"
+    Use styled components and theme in it.`,
+    answer: `const ButtonStyled = styled.button<ButtonProps>\`
+    font-size: 1em;
+    cursor: \${({ isLoaded }) => (isLoaded ? "wait" : "pointer")};
+    margin: 0.5em;
+    border-radius: 25px;
+    padding: 0.75em 1.5em;
+    \${(p) => {
+      const buttonStyle = p.theme.ui.buttons[p.buttonType];
+      return \`
+        color: \${buttonStyle.color};
+        background: \${buttonStyle.background};
+        border: \${buttonStyle.border}
+      \`;
+    }}
+  \`;
   
-    const nextPhotoHandler = () => {
-      setNextPhoto((s) => s + 1);
-      setCurrentPhoto((s) => s + 1);
-    };
-    const prevPhotoHandler = () => {
-      setPrevPhoto((s) => s - 1);
-      setCurrentPhoto((s) => s - 1);
-    };
-    // return
-    <GalleryNavigation
-        nextPhoto={nextPhoto}
-        nextPhotoHandler={nextPhotoHandler}
-        prevPhoto={prevPhoto}
-        prevPhotoHandler={prevPhotoHandler}
-      />
-    
-      // Component
-    export const GalleryNavigation = ({
-        nextPhoto,
-        nextPhotoHandler,
-        prevPhoto,
-        prevPhotoHandler
-      }: {
-        nextPhoto: number;
-        nextPhotoHandler: () => void;
-        prevPhoto: number;
-        prevPhotoHandler: () => void;
-      }) => {
-        return (
-          <div>
-            {prevPhoto ? <button onClick={prevPhotoHandler}>Left</button> : null}
-      
-            {nextPhoto ? <button onClick={nextPhotoHandler}>Right</button> : null}
-          </div>
-        );
-      };  
-      `,
+  export const buttonTypes = [
+    "primary",
+    "secondary",
+    "outlined",
+    "ghost",
+  ] as const;
+  
+  interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    isDisabled?: boolean;
+    isLoaded?: boolean;
+    buttonType?: (typeof buttonTypes)[number];
+    children: ReactNode;
+  }
+  
+  export const Button = ({
+    children,
+    buttonType = "primary",
+    ...rest
+  }: ButtonProps) => {
+    const { isLoaded } = rest;
+    return (
+      <ButtonStyled buttonType={buttonType} {...rest}>
+        {isLoaded ? "Loading" : children}
+      </ButtonStyled>
+    );
+  };`,
     category: REACT,
     level: 2,
   },
@@ -2799,17 +2823,19 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 247,
-    question: `Create an "Save money" App. It should have an amount and 2 buttons, save X$ and remove x$. Use Redux for state.`,
+    question: `Create an "Save money" App. 
+    It should have balance, input(amount) and 2 buttons (save X$ and remove x$). 
+    Use Redux for state (not Tool kit).`,
     answer: `export const App = () => {
       const dispatch = useDispatch();
       const [value, setValue] = useState(0);
       const balance = useSelector(balanceSelector);
 
       const increaseHandler = () => {
-        dispatch(increase, value)
+        dispatch({type: 'INCR', payload: value})
       }
       const decreaseHandler = () => {
-        dispatch(decrease, value)
+        dispatch({type: 'DECR', payload: value})
       }
 
       return (<>
@@ -2823,10 +2849,10 @@ const quizReact: TQuiz[] = [
     const reducer = (state = {total: 0}, action) => {
       switch (action.type) {
         case INCR : {
-          return {...state, total: state.total + action.payload}
+          return {total: state.total + action.payload}
         }
         case DECR : {
-          return {...state, total: state.total - action.payload}
+          return {total: state.total - action.payload}
         }
         default: state
       }
@@ -2834,6 +2860,7 @@ const quizReact: TQuiz[] = [
     `,
     category: REACT,
     level: 2,
+    comment: "https://youtu.be/ldgnmiPIftw?si=cSWcqCfCeCqAYSTl"
   },
   {
     id: 248,
@@ -3335,8 +3362,8 @@ const quizReact: TQuiz[] = [
   },
   {
     id: 262,
-    question: `Create a theme toggler (dark - light).
-    Use styled components. `,
+    question: `Add support for "theme" from styled components. Add scheme and Theme toggler component.
+    Store current theme in redux.`,
     answer: `// add theme scheme
     const darkTheme = {
       color: white
@@ -3364,7 +3391,7 @@ const quizReact: TQuiz[] = [
     level: 2,
   },
   {
-    id: 262,
+    id: 263,
     question: `Convert this CSS to styled components:
     .toggle-switch {
       position: relative;
@@ -3442,14 +3469,64 @@ const quizReact: TQuiz[] = [
     }
   \`;
 
-  // components
-  <SwitchWrapper>
-  <input type="checkbox" checked={isToggled} onChange={onToggle} />
-  <Panel>
-    <Circle />
-  </Panel>
-</SwitchWrapper>
+    // components
+    <SwitchWrapper>
+      <input type="checkbox" checked={isToggled} onChange={onToggle} />
+      <Panel>
+        <Circle />
+      </Panel>
+    </SwitchWrapper>
     `,
+    category: REACT,
+    level: 2,
+  },
+  {
+    id: 264,
+    question: `Create a UIKit button. It should accept param "buttonTypes: [
+      'primary', 'secondary', 'outlined', 'ghost', ]"
+    Use styled components and theme in it.`,
+    answer: `const ButtonStyled = styled.button<ButtonProps>\`
+    font-size: 1em;
+    cursor: \${({ isLoaded }) => (isLoaded ? "wait" : "pointer")};
+    margin: 0.5em;
+    border-radius: 25px;
+    padding: 0.75em 1.5em;
+    \${(p) => {
+      const buttonStyle = p.theme.ui.buttons[p.buttonType];
+      return \`
+        color: \${buttonStyle.color};
+        background: \${buttonStyle.background};
+        border: \${buttonStyle.border}
+      \`;
+    }}
+  \`;
+  
+  export const buttonTypes = [
+    "primary",
+    "secondary",
+    "outlined",
+    "ghost",
+  ] as const;
+  
+  interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    isDisabled?: boolean;
+    isLoaded?: boolean;
+    buttonType?: (typeof buttonTypes)[number];
+    children: ReactNode;
+  }
+  
+  export const Button = ({
+    children,
+    buttonType = "primary",
+    ...rest
+  }: ButtonProps) => {
+    const { isLoaded } = rest;
+    return (
+      <ButtonStyled buttonType={buttonType} {...rest}>
+        {isLoaded ? "Loading" : children}
+      </ButtonStyled>
+    );
+  };`,
     category: REACT,
     level: 2,
   },
@@ -4035,6 +4112,19 @@ const quizCSS: TQuiz[] = [
     category: "CSS",
     level: 1,
   },
+  {
+    id: 806,
+    question: `How to change background-color in div when hovering. Make it smooth.`,
+    answer: `div {
+      background-color: red;
+      transition: background 100ms;
+    }
+    div:hover {
+      background-color: green;
+    }`,
+    category: "CSS",
+    level: 1,
+  },
 ];
 
 const quizOther: TQuiz[] = [
@@ -4110,6 +4200,56 @@ const quizOther: TQuiz[] = [
     answer: `// git reset <hash> - will erase all commits before this one, but it added changes to the files (you can save them)
     // git reset --hard <hash> - will erase all commits and changes before this one
     // git reverse <hash> - added a new commit with rolled back changes from this commit`,
+    category: "Other",
+    level: 3,
+  },
+  {
+    id: 906,
+    question: `How you can use global variables that can be configured at compile time?
+    You are using webpack.
+    For example: 
+    You application can work in "demo mode" - when there is no real requests 
+    and "product mode" when you make real requests.`,
+    answer: `// You can use DefinePlugin and pass the variable from the running script, 
+    // eg: "webpack --env mode='demo'"
+    const is_demo_mode =  env.mode === 'demo' ? true : false;
+    new webpack.DefinePlugin({
+      __IS_DEMO_MODE__: JSON.stringify(is_demo_mode)
+    })
+    // you can use it in the component now.
+    if (__IS_DEMO_MODE__) {
+      // work with local storage
+    } else {
+      // fetch data
+    }
+    // The compiled bundle will have only one logic, without "if" - Tree shaking.
+    `,
+    category: "Other",
+    level: 3,
+  },
+  {
+    id: 907,
+    question: `You need to update Eslint up to 9 version, but some dependencies requires 8.
+    How you can update it`,
+    answer: `// you can use "overrides" section in package.json and explicit
+    overrides : {
+      "eslint" : "^9.2.0"
+    }
+    // then use command
+    npm install eslint@latest
+    // or you can use --force
+    npm install eslint@latest --force
+    `,
+    category: "Other",
+    level: 3,
+  },
+  {
+    id: 908,
+    question: `How to add CI to the project.`,
+    answer: `// you can use Jenkins or "github actions" for CI
+    // Example: for "github actions" use main.yml add commands:
+    run: npm install
+    run: npm run build:prod`,
     category: "Other",
     level: 3,
   },
